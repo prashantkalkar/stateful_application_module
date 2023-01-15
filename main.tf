@@ -1,6 +1,6 @@
 module "cluster_nodes" {
   count       = length(var.nodes)
-  source      = "../node-module"
+  source      = "./modules/node-module"
   app_name    = var.app_name
   data_volume = {
     size_in_gibs = 16
