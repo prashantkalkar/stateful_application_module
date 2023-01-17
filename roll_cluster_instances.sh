@@ -12,7 +12,7 @@ echo "Processing ASGs: $*"
 
 # Check if cluster is healthy (or All ASGs are healthy - instances are InService)
 # https://github.com/koalaman/shellcheck/wiki/SC2128
-if aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "${asgNames[@]}" | jq ".AutoScalingGroups[].Instances[].LifecycleState" | grep InService
+if ! aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "${asgNames[@]}" | jq ".AutoScalingGroups[].Instances[].LifecycleState" | grep -v InService
 then
   echo "All instances are InService"
   # https://github.com/koalaman/shellcheck/wiki/SC2128
