@@ -20,6 +20,7 @@ resource "null_resource" "roll_instances" {
   triggers = {
     node_template = join(",", module.cluster_nodes[*].launch_template_version)
     asg_names = join(" ", module.cluster_nodes[*].asg_name)
+    rolling_script = filesha256("${path.module}/roll_cluster_instances.sh")
   }
 
   depends_on = [ module.cluster_nodes ]

@@ -57,7 +57,7 @@ locals {
 resource "aws_launch_template" "node" {
   name          = "${var.app_name}-node-${format("%02d", var.node_index)}"
   image_id      = var.node_image
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 
   monitoring {
     enabled = false
