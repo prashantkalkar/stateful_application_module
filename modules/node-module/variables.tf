@@ -40,3 +40,11 @@ variable "security_groups" {
 variable "node_image" {
   type = string
 }
+
+variable "jq_download_url" {
+  type = string
+}
+
+variable "command_timeout_seconds" {
+  type = number
+}

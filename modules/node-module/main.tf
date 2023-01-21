@@ -51,6 +51,8 @@ locals {
     asg_name      = local.asg_name
     interface_id  = aws_network_interface.node_network_interface.id
     aws_region    = data.aws_region.current.name
+    jq_download_url = var.jq_download_url
+    command_timeout_seconds = var.command_timeout_seconds
   })
   asg_hook_name = "${var.app_name}-node-asg-hook"
 }
