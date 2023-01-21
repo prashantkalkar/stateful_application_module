@@ -21,3 +21,8 @@ variable "security_groups" {
 variable "node_image" {
   type = string
 }
+
+variable "asg_inservice_timeout_in_mins" {
+  type = number
+  default = 10
+}
