@@ -29,7 +29,8 @@ resource "aws_autoscaling_group" "node_asg" {
     name                 = local.asg_hook_name
     lifecycle_transition = "autoscaling:EC2_INSTANCE_LAUNCHING"
     default_result       = "ABANDON"
-    heartbeat_timeout    = 300
+    # allow enough time for issue debug and recover
+    heartbeat_timeout    = 3600
   }
 
   tag {
