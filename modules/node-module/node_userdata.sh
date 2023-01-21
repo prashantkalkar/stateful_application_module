@@ -2,11 +2,17 @@
 
 set -Exeuo pipefail
 
+# shellcheck disable=SC2154
 DEVICE_NAME=${device_name}
+# shellcheck disable=SC2154
 VOLUME_ID=${volume_id}
+# shellcheck disable=SC2154
 ASG_HOOK_NAME=${asg_hook_name}
+# shellcheck disable=SC2154
 ASG_NAME=${asg_name}
+# shellcheck disable=SC2154
 ENI_ID=${interface_id}
+# shellcheck disable=SC2154
 REGION=${aws_region}
 
 # get instance Id
