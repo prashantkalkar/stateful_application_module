@@ -26,7 +26,7 @@ resource "null_resource" "roll_instances" {
   depends_on = [ module.cluster_nodes ]
 
   provisioner "local-exec" {
-    command = "${path.module}/roll_cluster_instances.sh 30m ${self.triggers.asg_names}"
+    command = "${path.module}/roll_cluster_instances.sh 10m ${self.triggers.asg_names}"
   }
 }
 
