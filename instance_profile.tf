@@ -46,11 +46,19 @@ resource "aws_iam_policy" "node_policy" {
         ]
         Effect   = "Allow"
         Resource = [
-          "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*",
+          "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*",
           "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:instance/*",
           "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:volume/*",
           "arn:aws:autoscaling:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:autoScalingGroup:*"
         ]
+      },
+      {
+        Action = [
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DescribeVolumes",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
       }
     ]
   })
