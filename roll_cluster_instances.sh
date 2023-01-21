@@ -12,9 +12,10 @@ echo "Processing ASGs: $*"
 
 # https://github.com/koalaman/shellcheck/wiki/SC2128
 for asgName in "${asgNames[@]}" ; do
+  echo "Waiting for all ASG instances to be InService"
   # Check if cluster is healthy (or All ASGs are healthy - instances are InService)
   # https://github.com/koalaman/shellcheck/wiki/SC2128
-  if ! aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "${asgNames[@]}" | jq ".AutoScalingGroups[].Instances[].LifecycleState" | grep -v InService
+  if timeout "$asgWaitForCapacityTimeout" bash -c "until aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $* | jq '.AutoScalingGroups | map(select(.Instances[0].LifecycleState == \"InService\")) | length' | grep ${#asgNames[@]} ; do sleep 10; done";
   then
     echo "Starting with instance rollout for ASG $asgName"
     asgLaunchTemplateVersion=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$asgName" | jq -r ".AutoScalingGroups[].LaunchTemplate.Version")
@@ -26,9 +27,8 @@ for asgName in "${asgNames[@]}" ; do
       echo "Terminating the instance to perform ASG rollout"
       instanceId=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$asgName" | jq -r ".AutoScalingGroups[].Instances[0].InstanceId")
 
-      aws ec2 terminate-instances --instance-ids "$instanceId"
-      echo "Waiting for instance to terminate.. "
-      aws ec2 wait instance-terminated --instance-ids "$instanceId"
+      aws autoscaling terminate-instance-in-auto-scaling-group --instance-id "$instanceId" --no-should-decrement-desired-capacity
+
       echo "Waiting for instance to be InService"
       timeout "$asgWaitForCapacityTimeout" bash -c "until aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $asgName | jq \".AutoScalingGroups[].Instances[].LifecycleState\" | grep InService ; do sleep 10; echo -n \".\"; done";
       echo "Done"
