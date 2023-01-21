@@ -37,6 +37,6 @@ for asgName in "${asgNames[@]}" ; do
     fi
   else
     echo "Some instances do not seems to be healthy. Cancelling rollout."
-    break
+    exit 1
   fi
 done
