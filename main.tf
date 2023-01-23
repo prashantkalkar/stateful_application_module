@@ -1,17 +1,18 @@
 module "cluster_nodes" {
-  count                    = length(var.nodes)
-  source                   = "./modules/node-module"
-  app_name                 = var.app_name
-  data_volume              = var.data_volume
-  node_index               = count.index
-  node_instance_profile_id = aws_iam_instance_profile.node_instance_profile.id
-  node_ip                  = var.nodes[count.index].node_ip
-  node_key_name            = var.node_key_name
-  node_subnet_id           = var.nodes[count.index].node_subnet_id
-  security_groups          = var.security_groups
-  node_image               = var.node_image
-  jq_download_url          = var.jq_download_url
-  command_timeout_seconds  = var.command_timeout_seconds
+  count                                = length(var.nodes)
+  source                               = "./modules/node-module"
+  app_name                             = var.app_name
+  data_volume                          = var.data_volume
+  node_index                           = count.index
+  node_instance_profile_id             = aws_iam_instance_profile.node_instance_profile.id
+  node_ip                              = var.nodes[count.index].node_ip
+  node_key_name                        = var.node_key_name
+  node_subnet_id                       = var.nodes[count.index].node_subnet_id
+  security_groups                      = var.security_groups
+  node_image                           = var.node_image
+  jq_download_url                      = var.jq_download_url
+  command_timeout_seconds              = var.command_timeout_seconds
+  asg_lifecycle_hook_heartbeat_timeout = var.asg_lifecycle_hook_heartbeat_timeout
 }
 
 resource "null_resource" "roll_instances" {

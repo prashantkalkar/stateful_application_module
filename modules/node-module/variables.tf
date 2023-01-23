@@ -46,3 +46,7 @@ variable "jq_download_url" {
 variable "command_timeout_seconds" {
   type = number
 }
+
+variable "asg_lifecycle_hook_heartbeat_timeout" {
+  type = number
+}

@@ -46,3 +46,10 @@ variable "command_timeout_seconds" {
   default = 1800
   description = "The timeout that will be used by the userdata script to retry commands on failure. Keep it higher to allow manual recovery"
 }
+
+variable "asg_lifecycle_hook_heartbeat_timeout" {
+  type = number
+  default = 3600
+  description = "Timeout for ASG initial lifecycle hook. This is used only during ASG creation, subsequent value changes are not handled by terraform (has to be updated manually)"
+}
+

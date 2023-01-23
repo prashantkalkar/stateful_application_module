@@ -53,6 +53,8 @@ timeout "$COMMAND_TIMEOUT_SECS"s bash -c "until aws ec2 describe-volumes --volum
 # Install required software.
 echo "Installing required software"
 
+# Check cluster health as a whole
+
 # Update AWS ASG hook status to proceed.
 aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE \
   --instance-id "$INSTANCE_ID" --lifecycle-hook-name "$ASG_HOOK_NAME" \
