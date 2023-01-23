@@ -64,7 +64,6 @@ No modules.
 | <a name="input_command_timeout_seconds"></a> [command\_timeout\_seconds](#input\_command\_timeout\_seconds) | n/a | `number` | n/a | yes |
 | <a name="input_data_volume"></a> [data\_volume](#input\_data\_volume) | n/a | <pre>object({<br>    size_in_gibs = number<br>    type = string<br>  })</pre> | n/a | yes |
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | n/a | yes |
-| <a name="input_node_availability_zone"></a> [node\_availability\_zone](#input\_node\_availability\_zone) | n/a | `string` | n/a | yes |
 | <a name="input_node_image"></a> [node\_image](#input\_node\_image) | n/a | `string` | n/a | yes |
 | <a name="input_node_index"></a> [node\_index](#input\_node\_index) | n/a | `number` | n/a | yes |
 | <a name="input_node_instance_profile_id"></a> [node\_instance\_profile\_id](#input\_node\_instance\_profile\_id) | n/a | `string` | n/a | yes |

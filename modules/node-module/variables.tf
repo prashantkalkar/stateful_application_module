@@ -10,10 +10,6 @@ variable "node_subnet_id" {
   type = string
 }
 
-variable "node_availability_zone" {
-  type = string
-}
-
 variable "node_ip" {
   type = string
 }

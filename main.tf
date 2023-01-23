@@ -12,7 +12,6 @@ module "cluster_nodes" {
   node_key_name            = var.node_key_name
   node_subnet_id           = var.nodes[count.index].node_subnet_id
   security_groups          = var.security_groups
-  node_availability_zone   = var.nodes[count.index].availability_zone
   node_image               = var.node_image
   jq_download_url          = var.jq_download_url
   command_timeout_seconds  = var.command_timeout_seconds

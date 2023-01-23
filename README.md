@@ -118,7 +118,7 @@ Try to follow the FQA 1 and 2 to debug and recover the infrastructure to desired
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | `"https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"` | no |
 | <a name="input_node_image"></a> [node\_image](#input\_node\_image) | n/a | `string` | n/a | yes |
 | <a name="input_node_key_name"></a> [node\_key\_name](#input\_node\_key\_name) | n/a | `string` | n/a | yes |
-| <a name="input_nodes"></a> [nodes](#input\_nodes) | n/a | <pre>list(object({<br>    node_ip = string<br>    node_subnet_id = string<br>    availability_zone = string<br>  }))</pre> | n/a | yes |
+| <a name="input_nodes"></a> [nodes](#input\_nodes) | n/a | <pre>list(object({<br>    node_ip = string<br>    node_subnet_id = string<br>  }))</pre> | n/a | yes |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | n/a | `list(string)` | n/a | yes |
 
 ## Outputs

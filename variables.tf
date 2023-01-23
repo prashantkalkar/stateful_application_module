@@ -2,7 +2,6 @@ variable "nodes" {
   type = list(object({
     node_ip = string
     node_subnet_id = string
-    availability_zone = string
   }))
 }
 
