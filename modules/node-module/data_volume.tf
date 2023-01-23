@@ -8,6 +8,8 @@ resource "aws_ebs_volume" "node_data" {
   availability_zone = data.aws_subnet.node_subnet.availability_zone
   size              = var.data_volume.size_in_gibs
   type              = var.data_volume.type
+  iops              = var.data_volume.iops
+  throughput        = var.data_volume.throughput_mib_per_sec
   encrypted         = true
 
   tags = {

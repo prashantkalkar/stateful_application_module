@@ -22,6 +22,8 @@ variable "data_volume" {
   type = object({
     size_in_gibs = number
     type = string
+    iops = optional(number)
+    throughput_mib_per_sec = optional(number)
   })
 }
 

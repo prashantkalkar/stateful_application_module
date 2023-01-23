@@ -1,11 +1,8 @@
 module "cluster_nodes" {
-  count       = length(var.nodes)
-  source      = "./modules/node-module"
-  app_name    = var.app_name
-  data_volume = {
-    size_in_gibs = 16
-    type         = "gp3"
-  }
+  count                    = length(var.nodes)
+  source                   = "./modules/node-module"
+  app_name                 = var.app_name
+  data_volume              = var.data_volume
   node_index               = count.index
   node_instance_profile_id = aws_iam_instance_profile.node_instance_profile.id
   node_ip                  = var.nodes[count.index].node_ip
@@ -19,12 +16,12 @@ module "cluster_nodes" {
 
 resource "null_resource" "roll_instances" {
   triggers = {
-    node_template = join(",", module.cluster_nodes[*].launch_template_version)
-    asg_names = join(" ", module.cluster_nodes[*].asg_name)
+    node_template  = join(",", module.cluster_nodes[*].launch_template_version)
+    asg_names      = join(" ", module.cluster_nodes[*].asg_name)
     rolling_script = filesha256("${path.module}/roll_cluster_instances.sh")
   }
 
-  depends_on = [ module.cluster_nodes ]
+  depends_on = [module.cluster_nodes]
 
   provisioner "local-exec" {
     command = "${path.module}/roll_cluster_instances.sh ${var.asg_inservice_timeout_in_mins}m ${self.triggers.asg_names}"

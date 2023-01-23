@@ -115,6 +115,7 @@ Try to follow the FQA 1 and 2 to debug and recover the infrastructure to desired
 | <a name="input_app_name"></a> [app\_name](#input\_app\_name) | n/a | `string` | n/a | yes |
 | <a name="input_asg_inservice_timeout_in_mins"></a> [asg\_inservice\_timeout\_in\_mins](#input\_asg\_inservice\_timeout\_in\_mins) | Timeout in mins which will be used by the rolling update script to wait for instances to be InService for an ASG | `number` | `10` | no |
 | <a name="input_command_timeout_seconds"></a> [command\_timeout\_seconds](#input\_command\_timeout\_seconds) | The timeout that will be used by the userdata script to retry commands on failure. Keep it higher to allow manual recovery | `number` | `1800` | no |
+| <a name="input_data_volume"></a> [data\_volume](#input\_data\_volume) | n/a | <pre>object({<br>    size_in_gibs = number<br>    type = string<br>    iops = optional(number)<br>    throughput_mib_per_sec = optional(number)<br>  })</pre> | n/a | yes |
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | `"https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"` | no |
 | <a name="input_node_image"></a> [node\_image](#input\_node\_image) | n/a | `string` | n/a | yes |
 | <a name="input_node_key_name"></a> [node\_key\_name](#input\_node\_key\_name) | n/a | `string` | n/a | yes |
