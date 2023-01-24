@@ -18,6 +18,18 @@ REGION=${aws_region}
 JQ_DOWNLOAD_URL=${jq_download_url}
 # shellcheck disable=SC2154
 COMMAND_TIMEOUT_SECS=${command_timeout_seconds}
+# shellcheck disable=SC2154
+MOUNT_VOLUME_SCRIPT_CONTENTS=${mount_volume_script_contents}
+# shellcheck disable=SC2154
+MOUNT_PATH=${mount_path}
+# shellcheck disable=SC2154
+FILE_SYSTEM_TYPE=${file_system_type}
+# shellcheck disable=SC2154
+COMMA_SEPARATED_MOUNT_PARAMS=${comma_separated_mount_params}
+# shellcheck disable=SC2154
+OWNER=${mount_path_owner_user}
+# shellcheck disable=SC2154
+GROUP=${mount_path_owner_group}
 
 # get instance Id
 TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
@@ -49,6 +61,9 @@ echo "Waiting for volume to be in-use"
 timeout "$COMMAND_TIMEOUT_SECS"s bash -c "until aws ec2 describe-volumes --volume-ids $VOLUME_ID --region $REGION | jq \".Volumes[].State\" | grep in-use; do sleep 20; done"
 
 # Mount volume
+echo "$MOUNT_VOLUME_SCRIPT_CONTENTS" | base64 --decode > mount_volume.sh
+chmod +x mount_volume.sh
+./mount_volume.sh "$VOLUME_ID" "$MOUNT_PATH" "$FILE_SYSTEM_TYPE" "$COMMA_SEPARATED_MOUNT_PARAMS" "$OWNER" "$GROUP"
 
 # Install required software.
 echo "Installing required software"

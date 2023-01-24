@@ -20,10 +20,15 @@ variable "node_index" {
 
 variable "data_volume" {
   type = object({
-    size_in_gibs = number
-    type = string
-    iops = optional(number)
+    size_in_gibs           = number
+    type                   = string
+    iops                   = optional(number)
     throughput_mib_per_sec = optional(number)
+    mount_path             = string
+    file_system_type       = string
+    mount_params           = list(string)
+    mount_path_owner_user  = string
+    mount_path_owner_group = string
   })
 }
 

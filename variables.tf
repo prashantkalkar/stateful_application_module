@@ -7,11 +7,26 @@ variable "nodes" {
 
 variable "data_volume" {
   type = object({
-    size_in_gibs = number
-    type = string
-    iops = optional(number)
+    size_in_gibs           = number
+    type                   = string
+    iops                   = optional(number)
     throughput_mib_per_sec = optional(number)
+    mount_path             = string
+    file_system_type       = string
+    mount_params           = optional(list(string), [])
+    mount_path_owner_user  = string
+    mount_path_owner_group = string
   })
+  description = <<EOT
+    type                   = "EBS volume type e.g. gp2, gp3 etc"
+    iops                   = "Only valid for type gp3"
+    throughput_mib_per_sec = "only valid for type gp3"
+    mount_path             = "path where to mount the data volume"
+    file_system_type       = "File system to use to format the volume. eg. ext4 or xfs. This is used only initial time. Later changes will be ignored"
+    mount_params           = "Parameters to be used while mounting the volume eg. noatime etc. Optional, empty if not provided"
+    mount_path_owner_user  = "OS user that should own volume mount path will be used for chown"
+    mount_path_owner_group = "OS group that should own the volume mount path, will be used for chown"
+  EOT
 }
 
 variable "node_key_name" {
