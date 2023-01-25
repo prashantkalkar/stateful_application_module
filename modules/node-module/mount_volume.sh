@@ -9,13 +9,20 @@ COMMA_SEPARATED_MOUNT_PARAMS=$4
 OWNER=$5
 GROUP=$6
 
-for NVME_DEVICE_PATH in $(lsblk --raw --paths --noheadings --nodeps --output NAME | grep "nvme"); do
-  VOLUME_ID_OF_DEVICE=$(/sbin/ebsnvme-id "${NVME_DEVICE_PATH}" | grep 'Volume ID' | awk '{print $3}')
-  if [[ "${VOLUME_ID}" == "${VOLUME_ID_OF_DEVICE}" ]]; then
-    DEVICE_PATH="${NVME_DEVICE_PATH}"
-    break
-  fi
-done
+# echo list of devices
+lsblk --raw --paths --noheadings --nodeps --output NAME | grep "nvme"
+blkid
+
+while
+  for NVME_DEVICE_PATH in $(lsblk --raw --paths --noheadings --nodeps --output NAME | grep "nvme"); do
+    VOLUME_ID_OF_DEVICE=$(/sbin/ebsnvme-id "${NVME_DEVICE_PATH}" | grep 'Volume ID' | awk '{print $3}')
+    if [[ "${VOLUME_ID}" == "${VOLUME_ID_OF_DEVICE}" ]]; then
+      DEVICE_PATH="${NVME_DEVICE_PATH}"
+      break
+    fi
+  done
+  [[ -z ${DEVICE_PATH} ]]
+do sleep 1; done
 
 if ! blkid -o value -s TYPE "${DEVICE_PATH}" || [ -z "$(blkid -o value -s TYPE "${DEVICE_PATH}")" ]
 then
@@ -35,6 +42,10 @@ then
 else
   echo "Disk already formatted no need to format."
 fi
+
+# echo list of devices
+lsblk -f
+blkid
 
 mkdir -p "${MOUNT_PATH}"
 
@@ -57,6 +68,8 @@ else
   echo "no need to add fstab entry"
 fi
 
+cat /etc/fstab
+
 mount -a
 
 while
@@ -66,6 +79,10 @@ while
   DEVICE_MOUNTPOINT="$(echo -n "${DEVICE_DETAILS}" | awk '{print $3}')"
   [[ -z ${DEVICE_UUID} ]]  || [[ -z ${DEVICE_MOUNTPOINT} ]]
 do sleep 1; done
+
+# echo list of devices
+lsblk -f
+blkid
 
 EXISTING_OWNER=$(stat -c "%U" "${MOUNT_PATH}")
 EXISTING_GROUP=$(stat -c "%G" "${MOUNT_PATH}")
