@@ -8,10 +8,8 @@ module "cluster_nodes" {
   node_ip                              = var.nodes[count.index].node_ip
   node_key_name                        = var.node_key_name
   node_subnet_id                       = var.nodes[count.index].node_subnet_id
-  node_files_toupload                  = [ for file_details in var.nodes[count.index].node_files_toupload :{
-                                              contents: base64encode(file_details.contents),
-                                              destination: file_details.destination
-                                          }]
+  node_files_toupload                  = var.nodes[count.index].node_files_toupload
+  node_config_script                   = var.node_config_script
   security_groups                      = var.security_groups
   node_image                           = var.node_image
   jq_download_url                      = var.jq_download_url

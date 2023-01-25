@@ -71,6 +71,9 @@ locals {
     mount_path_owner_user        = var.data_volume.mount_path_owner_user
     mount_path_owner_group       = var.data_volume.mount_path_owner_group
     node_files_toupload          = var.node_files_toupload
+    node_config_script           = var.node_config_script
+    node_index                   = var.node_index
+    node_ip                      = var.node_ip
   })
   asg_hook_name = "${var.app_name}-node-asg-hook"
 }

@@ -11,8 +11,8 @@ variable "nodes" {
     node_ip = IP address of the cluster node. This should be available within the subnet.
     node_subnet_id = Id of the subnet where node should be created.
     node_files_toupload = list of file to be uploaded per node. These can be cluster confi files etc.
-    node_files_toupload.contents = File contents to be uploaded on the node.
-    node_files_toupload.destination = File destination on the node. This will be the file path and name on the node. The file ownership should be changed by service config script.
+    node_files_toupload.contents = Base64 encoded contents of the file to be uploaded on the node.
+    node_files_toupload.destination = File destination on the node. This will be the file path and name on the node. The file ownership should be changed by node_config_script.
   EOT
 }
 
@@ -37,6 +37,14 @@ variable "data_volume" {
     mount_params           = "Parameters to be used while mounting the volume eg. noatime etc. Optional, empty if not provided"
     mount_path_owner_user  = "OS user that should own volume mount path will be used for chown"
     mount_path_owner_group = "OS group that should own the volume mount path, will be used for chown"
+  EOT
+}
+
+variable "node_config_script" {
+  type = string
+  description = <<EOT
+  Base64 encoded node configuration shell script.
+  Must include configure_cluster_node and wait_for_healthy_cluster function. Check documentation for more details about the contract
   EOT
 }
 

@@ -39,6 +39,10 @@ variable "node_files_toupload" {
   }))
 }
 
+variable "node_config_script" {
+  type = string
+}
+
 variable "node_instance_profile_id" {
   type = string
 }

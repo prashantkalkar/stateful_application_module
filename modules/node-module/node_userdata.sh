@@ -30,6 +30,12 @@ COMMA_SEPARATED_MOUNT_PARAMS=${comma_separated_mount_params}
 OWNER=${mount_path_owner_user}
 # shellcheck disable=SC2154
 GROUP=${mount_path_owner_group}
+# shellcheck disable=SC2154
+NODE_CONFIG_SCRIPT=${node_config_script}
+# shellcheck disable=SC2154
+NODE_INDEX=${node_index}
+# shellcheck disable=SC2154
+NODE_IP=${node_ip}
 
 # upload files to node
 # shellcheck disable=SC1083
@@ -75,9 +81,14 @@ chmod +x mount_volume.sh
 ./mount_volume.sh "$VOLUME_ID" "$MOUNT_PATH" "$FILE_SYSTEM_TYPE" "$COMMA_SEPARATED_MOUNT_PARAMS" "$OWNER" "$GROUP"
 
 # Install required software.
-echo "Installing required software"
+echo "Calling the node configuration script"
+echo "$NODE_CONFIG_SCRIPT" | base64 --decode > node_config_script.sh
+chmod +x node_config_script.sh
+source node_config_script.sh
+configure_cluster_node "$NODE_INDEX" "$NODE_IP"
 
 # Check cluster health as a whole
+wait_for_healthy_cluster "$NODE_INDEX" "$NODE_IP"
 
 # Update AWS ASG hook status to proceed.
 aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE \
