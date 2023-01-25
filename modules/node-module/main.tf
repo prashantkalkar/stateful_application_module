@@ -70,6 +70,7 @@ locals {
     comma_separated_mount_params = join(",", var.data_volume.mount_params)
     mount_path_owner_user        = var.data_volume.mount_path_owner_user
     mount_path_owner_group       = var.data_volume.mount_path_owner_group
+    node_files_toupload          = var.node_files_toupload
   })
   asg_hook_name = "${var.app_name}-node-asg-hook"
 }

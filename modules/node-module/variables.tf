@@ -32,6 +32,13 @@ variable "data_volume" {
   })
 }
 
+variable "node_files_toupload" {
+  type = list(object({
+    contents = string
+    destination = string
+  }))
+}
+
 variable "node_instance_profile_id" {
   type = string
 }

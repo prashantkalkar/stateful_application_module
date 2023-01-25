@@ -2,7 +2,18 @@ variable "nodes" {
   type = list(object({
     node_ip = string
     node_subnet_id = string
+    node_files_toupload = optional(list(object({
+      contents = string
+      destination = string
+    })), [])
   }))
+  description = <<EOT
+    node_ip = IP address of the cluster node. This should be available within the subnet.
+    node_subnet_id = Id of the subnet where node should be created.
+    node_files_toupload = list of file to be uploaded per node. These can be cluster confi files etc.
+    node_files_toupload.contents = File contents to be uploaded on the node.
+    node_files_toupload.destination = File destination on the node. This will be the file path and name on the node. The file ownership should be changed by service config script.
+  EOT
 }
 
 variable "data_volume" {

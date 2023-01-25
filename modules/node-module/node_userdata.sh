@@ -31,6 +31,15 @@ OWNER=${mount_path_owner_user}
 # shellcheck disable=SC2154
 GROUP=${mount_path_owner_group}
 
+# upload files to node
+# shellcheck disable=SC1083
+%{ for file_details in node_files_toupload }
+# shellcheck disable=SC2154
+# shellcheck disable=SC2086
+echo "${file_details.contents}" | base64 --decode > ${file_details.destination}
+# shellcheck disable=SC1083
+%{ endfor }
+
 # get instance Id
 TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -v http://169.254.169.254/latest/meta-data/instance-id)

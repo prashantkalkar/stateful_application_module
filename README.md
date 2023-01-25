@@ -120,7 +120,7 @@ Try to follow the FQA 1 and 2 to debug and recover the infrastructure to desired
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | `"https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"` | no |
 | <a name="input_node_image"></a> [node\_image](#input\_node\_image) | n/a | `string` | n/a | yes |
 | <a name="input_node_key_name"></a> [node\_key\_name](#input\_node\_key\_name) | n/a | `string` | n/a | yes |
-| <a name="input_nodes"></a> [nodes](#input\_nodes) | n/a | <pre>list(object({<br>    node_ip = string<br>    node_subnet_id = string<br>  }))</pre> | n/a | yes |
+| <a name="input_nodes"></a> [nodes](#input\_nodes) | node\_ip = IP address of the cluster node. This should be available within the subnet.<br>    node\_subnet\_id = Id of the subnet where node should be created.<br>    node\_files\_toupload = list of file to be uploaded per node. These can be cluster confi files etc.<br>    node\_files\_toupload.contents = File contents to be uploaded on the node.<br>    node\_files\_toupload.destination = File destination on the node. This will be the file path and name on the node. The file ownership should be changed by service config script. | <pre>list(object({<br>    node_ip = string<br>    node_subnet_id = string<br>    node_files_toupload = optional(list(object({<br>      contents = string<br>      destination = string<br>    })), [])<br>  }))</pre> | n/a | yes |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | n/a | `list(string)` | n/a | yes |
 
 ## Outputs
