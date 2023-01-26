@@ -11,8 +11,6 @@ ASG_HOOK_NAME=${asg_hook_name}
 # shellcheck disable=SC2154
 ASG_NAME=${asg_name}
 # shellcheck disable=SC2154
-ENI_ID=${interface_id}
-# shellcheck disable=SC2154
 REGION=${aws_region}
 # shellcheck disable=SC2154
 JQ_DOWNLOAD_URL=${jq_download_url}
@@ -55,19 +53,8 @@ curl -Lo jq "$JQ_DOWNLOAD_URL"
 chmod +x jq
 sudo mv jq /usr/local/bin/
 
-echo "Waiting for network interface and EBS volume to be made available"
-timeout "$COMMAND_TIMEOUT_SECS"s bash -c "until aws ec2 describe-network-interfaces --network-interface-ids $ENI_ID --region $REGION | jq \".NetworkInterfaces[].Status\" | grep available ; do sleep 20; echo -n \".\"; done";
+echo "Waiting for EBS volume to be made available"
 timeout "$COMMAND_TIMEOUT_SECS"s bash -c "until aws ec2 describe-volumes --volume-ids $VOLUME_ID --region $REGION | jq \".Volumes[].State\" | grep available; do sleep 20; done"
-
-# Attach the ENI
-# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/best-practices-for-configuring-network-interfaces.html
-# A warm or hot attach of an additional network interface might require you to manually bring up the second interface,
-# configure the private IPv4 address, and modify the route table accordingly.
-# Instances running Amazon Linux or Windows Server automatically recognize the warm or hot attach and configure themselves.
-aws ec2 attach-network-interface --device-index 1 --instance-id "$INSTANCE_ID" --network-interface-id "$ENI_ID" --region "$REGION"
-
-echo "Waiting for network-interface to be in-use"
-timeout "$COMMAND_TIMEOUT_SECS"s bash -c "until aws ec2 describe-network-interfaces --network-interface-ids $ENI_ID --region $REGION | jq \".NetworkInterfaces[].Status\" | grep in-use ; do sleep 20; echo -n \".\"; done";
 
 # Attach volume
 aws ec2 attach-volume --device "$DEVICE_NAME" --instance-id "$INSTANCE_ID" --volume-id "$VOLUME_ID" --region "$REGION"
