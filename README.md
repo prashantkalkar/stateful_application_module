@@ -2,34 +2,40 @@
 Terraform module implementation for managing stateful application on AWS modelled as immutable infrastructure.
 
 ### Usage
-Note: Currently only Amazon Linux based AMI is supported. The setup installs additional ENI during instance userdata.
-The current script depends on the Amazon Linux's ability to automatically configure the additional ENI.
+Note: Currently only Amazon Linux based AMI is supported. The script is written assuming Amazon Linux and currently only tested on Amazon Linux.
 
 (To be updated)
 ```terraform
 module "cluster" {
-  source = "git::git@github.com:prashantkalkar/stateful_application_module.git?ref=<version-git-tag>"
-  app_name      = "kafka-test-setup"
+  source        = "git::git@github.com:prashantkalkar/stateful_application_module.git?ref=<version-git-tag>"
+  app_name      = "cluster-test-setup"
   node_key_name = "my-keypair"
   nodes         = [
     {
-      node_ip           = "<InstanceIPToBeAllocated>"
-      node_subnet_id    = "<subnet_id>"
-      availability_zone = "<zone_name>"
+      node_ip             = "<InstanceIPToBeAllocated>"
+      node_subnet_id      = "<subnet_id>"
+      node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
-      node_ip           = "<InstanceIPToBeAllocated>"
-      node_subnet_id    = "<subnet_id>"
-      availability_zone = "<zone_name>"
+      node_ip        = "<InstanceIPToBeAllocated>"
+      node_subnet_id = "<subnet_id>"
     },
     {
-      node_ip           = "<InstanceIPToBeAllocated>"
-      node_subnet_id    = "<subnet_id>"
-      availability_zone = "<zone_name>"
+      node_ip        = "<InstanceIPToBeAllocated>"
+      node_subnet_id = "<subnet_id>"
     }
   ]
-  security_groups = [ ]
-  node_image      = "<ami_id>"
+  node_config_script = filebase64("${path.module}/node_config_script.sh")
+  security_groups    = [aws_security_group.cluster_sg.id]
+  data_volume        = {
+    file_system_type       = "xfs"
+    mount_path             = "/mydata"
+    mount_path_owner_user  = "ec2-user"
+    mount_path_owner_group = "ec2-user"
+    size_in_gibs           = 16
+    type                   = "gp3"
+  }
+  node_image = "<ami_id>"
 }
 ```
 
@@ -71,6 +77,11 @@ If the issue has occurred during the terraform rolling update script, then can a
 If the failure has occurred at runtime (not during terraform apply), then ideally instances should be automatically recovered unless infrastucture is manually changed to cause the failure during instance recovery.
 Try to follow the FQA 1 and 2 to debug and recover the infrastructure to desired state.
 
+### References:
+https://cloudonaut.io/a-pattern-for-continuously-deployed-immutable-and-stateful-applications-on-aws/
+https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html#change-network-interface
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/best-practices-for-configuring-network-interfaces.html
+https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ubuntu-secondary-network-interface/
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

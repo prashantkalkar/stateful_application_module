@@ -25,7 +25,7 @@ resource "aws_autoscaling_group" "node_asg" {
   ]
   metrics_granularity = "1Minute"
   name                = local.asg_name
-  vpc_zone_identifier = [var.node_subnet_id]
+  availability_zones = [ data.aws_subnet.node_subnet.availability_zone ]
 
   initial_lifecycle_hook {
     name                 = local.asg_hook_name
@@ -60,7 +60,6 @@ locals {
     volume_id                    = aws_ebs_volume.node_data.id
     asg_hook_name                = local.asg_hook_name
     asg_name                     = local.asg_name
-    interface_id                 = aws_network_interface.node_network_interface.id
     aws_region                   = data.aws_region.current.name
     jq_download_url              = var.jq_download_url
     command_timeout_seconds      = var.command_timeout_seconds
@@ -92,10 +91,8 @@ resource "aws_launch_template" "node" {
   }
 
   network_interfaces {
-    associate_public_ip_address = false
-    delete_on_termination       = true
-    ipv6_address_count          = 0
-    security_groups             = var.security_groups
+    network_interface_id = aws_network_interface.node_network_interface.id
+    device_index = 0
   }
 
   key_name = var.node_key_name
