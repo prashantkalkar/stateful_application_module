@@ -13,6 +13,7 @@ GROUP=$6
 lsblk --raw --paths --noheadings --nodeps --output NAME | grep "nvme"
 blkid
 
+DEVICE_PATH=""
 while
   for NVME_DEVICE_PATH in $(lsblk --raw --paths --noheadings --nodeps --output NAME | grep "nvme"); do
     VOLUME_ID_OF_DEVICE=$(/sbin/ebsnvme-id "${NVME_DEVICE_PATH}" | grep 'Volume ID' | awk '{print $3}')
