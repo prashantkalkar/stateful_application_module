@@ -15,6 +15,8 @@ module "cluster_nodes" {
   jq_download_url                      = var.jq_download_url
   command_timeout_seconds              = var.command_timeout_seconds
   asg_lifecycle_hook_heartbeat_timeout = var.asg_lifecycle_hook_heartbeat_timeout
+  instance_type                        = var.instance_type
+  root_volume                          = var.root_volume
 }
 
 resource "null_resource" "roll_instances" {

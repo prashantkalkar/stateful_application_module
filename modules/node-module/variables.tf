@@ -18,8 +18,21 @@ variable "node_index" {
   type = number
 }
 
+variable "instance_type" {
+  type = string
+}
+
+variable "root_volume" {
+  type = object({
+    device_name = string
+    size_in_gibs = number
+    type = string
+  })
+}
+
 variable "data_volume" {
   type = object({
+    device_name            = string
     size_in_gibs           = number
     type                   = string
     iops                   = optional(number)

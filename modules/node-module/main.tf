@@ -56,7 +56,7 @@ data "aws_region" "current" {}
 locals {
   asg_name = "${var.app_name}-node-${format("%02d", var.node_index)}"
   userdata = templatefile("${path.module}/node_userdata.sh", {
-    device_name                  = "/dev/sdf"
+    device_name                  = var.data_volume.device_name
     volume_id                    = aws_ebs_volume.node_data.id
     asg_hook_name                = local.asg_hook_name
     asg_name                     = local.asg_name
@@ -80,7 +80,7 @@ locals {
 resource "aws_launch_template" "node" {
   name          = "${var.app_name}-node-${format("%02d", var.node_index)}"
   image_id      = var.node_image
-  instance_type = "t3.micro"
+  instance_type = var.instance_type
 
   monitoring {
     enabled = false
@@ -98,12 +98,12 @@ resource "aws_launch_template" "node" {
   key_name = var.node_key_name
 
   block_device_mappings {
-    device_name = "/dev/xvda" # Root device as per AMI
+    device_name = var.root_volume.device_name # Root device as per AMI
     ebs {
       delete_on_termination = true
       encrypted             = true
-      volume_size           = 16
-      volume_type           = "gp3"
+      volume_size           = var.root_volume.size_in_gibs
+      volume_type           = var.root_volume.type
     }
   }
 

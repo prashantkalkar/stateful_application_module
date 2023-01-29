@@ -18,6 +18,7 @@ variable "nodes" {
 
 variable "data_volume" {
   type = object({
+    device_name            = optional(string, "/dev/sdf")
     size_in_gibs           = number
     type                   = string
     iops                   = optional(number)
@@ -29,6 +30,7 @@ variable "data_volume" {
     mount_path_owner_group = string
   })
   description = <<EOT
+    device_name            = "Device name for additional Data volume, select name as per https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html"
     type                   = "EBS volume type e.g. gp2, gp3 etc"
     iops                   = "Only valid for type gp3"
     throughput_mib_per_sec = "only valid for type gp3"
@@ -87,3 +89,19 @@ variable "asg_lifecycle_hook_heartbeat_timeout" {
   description = "Timeout for ASG initial lifecycle hook. This is used only during ASG creation, subsequent value changes are not handled by terraform (has to be updated manually)"
 }
 
+variable "instance_type" {
+  type = string
+}
+
+variable "root_volume" {
+  type = object({
+    device_name = string
+    size_in_gibs = number
+    type = string
+  })
+  default = {
+    device_name = "/dev/xvda"
+    size_in_gibs = 16
+    type = "gp3"
+  }
+}
