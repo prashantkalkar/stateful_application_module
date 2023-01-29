@@ -40,7 +40,24 @@ module "cluster" {
 ```
 
 ### Why this module exists
-TBA
+#### A bit about stateful application
+
+##### Node identity
+For an stateful application cluster, every node needs to have an **unique identity**. This is required sometime to know which node is the leader and which nodes are followers. In other cases it is required to know which node in the cluster has what data. The node identity has to persist even when node is destroyed and recreated. This is completely different that stateless application when it does not matter which node you are talking to, as all nodes are identical. 
+The node identity is generally provided with the help of **fixed node IPs** or **fixed hostnames**.
+
+##### Cluster Quorum and rolling updates
+For highly available clusters, majority of nodes has to be running. This majority is called as quorum. For an cluster of n nodes, the quorum is represented by n/2 + 1 nodes. 
+to provide high availability. The cluster can remain available as long as nodes equals to the quorum are running. In other words, the cluster can service crash of nodes above the quorum size.  For example, for a 3 nodes cluster, quorum size is 2 and hence it can service 1 node crash. Similar, 5 node cluster can service 2 node crashes at the same time. 
+Any cluster automation assumes that minimum cluster size is 3 to allow a single node crash. This allows the automation to perform rolling update one node at a time. Since cluster size should service single node cluster, the cluster will remain fully operational while performing rolling update. 
+For stateful application every decision like rolling updates or replacement of unhealthy nodes etc should be taken at cluster level rather than locally at node level. 
+
+#### Module challenges 
+1. To solve the **identity problem** of the nodes, a external ENI is created. This ENI is then attached to every node launch template. This ENI retains the IP address even when node is recreated. The new replaced instance will resume the same IP address and hence same identity in the cluster. 
+2. The ensure the nodes are **restored** due to lost at runtime, every node is backed by Autoscaling group. 
+3. The use of ASG backed instances also allows **immutable infrastructure** for the cluster nodes. Restoring a mis-configured and mis-behaving node can be replaced by just terminating it which will be replaced with fresh node with last released configuration. Replacing the nodes for any config changes also reduced the configuration drift as well.
+4. For rolling update, one node at the time, the rolling update script **has to have a feedback** that the last node that was replaced has successfully completed the node configuration and is healthy. The health check should consider that the node has joined the cluster and cluster as a whole is considered to be healthy. To get this feedback during the node startup, the module add a **ASG lifecycle hook**. This makes the nodes start in **Pending:Wait state** till the node userdata script executes completely and the node passes the health checkup. If the node complete the configuration and health check successfully then the userdata script completes the lifecycle hook action and this move the node into InService state. The rolling update script waits till the nodes are InService post replacing the node. This ensures that only one node is updated at a time and the rolling process fails if node replacement is not successful. 
+5. Custom rolling update script: Terraform manages the infrastructure as a graph of dependencies and optimises the infra updates in parallel as much as possible. But for stateful application, a proper orchestration is required during rolling updates which becomes difficult to mange as part of the terraform dependency graph. That's why this is handled as part of a custom script. 
 
 ### How the module works
 TBA
