@@ -4,11 +4,11 @@ Terraform module implementation for managing stateful application on AWS modelle
 ### Usage
 Note: Currently only Amazon Linux based AMI is supported. The script is written assuming Amazon Linux and currently only tested on Amazon Linux.
 
-(To be updated)
 ```terraform
 module "cluster" {
   source        = "git::git@github.com:prashantkalkar/stateful_application_module.git?ref=<version-git-tag>"
   app_name      = "cluster-test-setup"
+  node_image = "<ami_id>"
   node_key_name = "my-keypair"
   nodes         = [
     {
@@ -19,14 +19,17 @@ module "cluster" {
     {
       node_ip        = "<InstanceIPToBeAllocated>"
       node_subnet_id = "<subnet_id>"
+      node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
       node_subnet_id = "<subnet_id>"
+      node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     }
   ]
   node_config_script = filebase64("${path.module}/node_config_script.sh")
   security_groups    = [aws_security_group.cluster_sg.id]
+  instance_type      = "<node_instance_type>"
   data_volume        = {
     file_system_type       = "xfs"
     mount_path             = "/mydata"
@@ -34,6 +37,7 @@ module "cluster" {
     mount_path_owner_group = "ec2-user"
     size_in_gibs           = 16
     type                   = "gp3"
+    mount_params           = ["noatime"]
   }
   node_image = "<ami_id>"
 }
