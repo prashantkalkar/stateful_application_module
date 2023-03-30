@@ -1,6 +1,14 @@
 # stateful_application_module
 Terraform module implementation for managing stateful application on AWS modelled as immutable infrastructure.
 
+### Features
+- Immutable infrastructure reduces configuration drifts for the cluster nodes. 
+- Zero downtime node by node rolling update with health checks (requires user's health check script). 
+- Auto recover the node loss at runtime as every node is backed by AWS ASG . 
+- Provides stable identity to cluster nodes with fixed/Static IPs. 
+- External EBS volumes are used per node. Auto-mounts the EBS volumes during node startup. 
+- Allow file uploads to individual nodes as part of the automation code. 
+
 ### Usage
 Note: Currently only Amazon Linux based AMI is supported. The script is written assuming Amazon Linux and currently only tested on Amazon Linux.
 
