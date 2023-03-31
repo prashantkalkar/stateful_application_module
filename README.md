@@ -8,6 +8,7 @@ Terraform module implementation for managing stateful application on AWS modelle
 - Provides stable identity to cluster nodes with fixed/Static IPs. 
 - External EBS volumes are used per node. Auto-mounts the EBS volumes during node startup. 
 - Allow file uploads to individual nodes as part of the automation code. 
+- Can be used to setup Kafka, Zookeeper, MongoDB and possibly others. 
 
 ### Usage
 Note: Currently only Amazon Linux based AMI is supported. The script is written assuming Amazon Linux and currently only tested on Amazon Linux.
