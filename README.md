@@ -73,7 +73,23 @@ For stateful application every decision like rolling updates or replacement of u
 5. Custom rolling update script: Terraform manages the infrastructure as a graph of dependencies and optimises the infra updates in parallel as much as possible. But for stateful application, a proper orchestration is required during rolling updates which becomes difficult to mange as part of the terraform dependency graph. That's why this is handled as part of a custom script. 
 
 ### How the module works
-TBA
+The module will create cluster nodes depending on the cluster size requested (generally set to old value starting from 3 e.g. 3, 5, 7 etc). 
+
+![alt text](https://github.com/prashantkalkar/stateful_application_module/blob/main/_docs/architecture.png?raw=true)
+
+The module creates mainly following resources per node (as shown in the image above)
+- Auto scaling group with min max set to 1. 
+- External Elastic Network interface (ENI) with IP address as requested. 
+- Elastic block storage (EBS) as requested.
+- Launch template with user data script to mount the EBS volume and to perform health checks (user data script has 2 parts one part has to be provided by module user. Another part is maintained within the module and calls the user provided script).
+- Autoscaling lifecycle hook for instance creation. 
+
+Apart from above resources, the module also include a rolling update script to update cluster instances as per the latest version of the Launch Template attached to the ASGs.  (ASG by default do not replace instances as per new Launch Template version). Rolling update script only update on node at a time. 
+
+When the cluster node is created or is replaced (due to modifications), the ASG lifecycle hook puts the node in a `Pending:Wait` state. The instance will remain in this state unless lifecycle action is not marked as complete (with continue). At the end of module user data script called the complete continue command on the instance lifecycle hook to complete the instance startup process. The userdata script also perform the cluster health check to ensure that node has joined the cluster successfully (this cluster health check function has to provided by the module user which is called from the module userdata script). The cluster health check happens before the lifecycle hook action. 
+
+This ensures that instance is shown as `InService` only after successful completion on user data script and also checking the cluster health status.  The above mentioned rolling update script waits for the instance to be `InService` before updating other instances in the service. The script will timeout for any failed instance which is stuck in `Pending:Wait` state due to failure of the user data script. (Refer to FAQs if this happens). That way, other cluster nodes are not updated with a failed change preventing any downtime (single node failure generally does not cause cluster unavailability due to quorum)
+
 
 ### FAQs
 
