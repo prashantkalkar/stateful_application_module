@@ -11,7 +11,7 @@ module "cluster_nodes" {
   node_files_toupload                  = var.nodes[count.index].node_files_toupload
   node_config_script                   = var.node_config_script
   security_groups                      = var.security_groups
-  node_image                           = var.nodes[count.index].node_image ? var.nodes[count.index].node_image : var.node_image
+  node_image                           = var.nodes[count.index].node_image != null ? var.nodes[count.index].node_image : var.node_image
   jq_download_url                      = var.jq_download_url
   command_timeout_seconds              = var.command_timeout_seconds
   asg_lifecycle_hook_heartbeat_timeout = var.asg_lifecycle_hook_heartbeat_timeout
