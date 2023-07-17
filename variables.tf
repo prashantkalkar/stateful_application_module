@@ -1,6 +1,7 @@
 variable "nodes" {
   type = list(object({
     node_ip = string
+    node_image = optional(string)
     node_subnet_id = string
     node_files_toupload = optional(list(object({
       contents = string
@@ -9,6 +10,7 @@ variable "nodes" {
   }))
   description = <<EOT
     node_ip = IP address of the cluster node. This should be available within the subnet.
+    node_image = image for node of the cluster node.
     node_subnet_id = Id of the subnet where node should be created.
     node_files_toupload = list of file to be uploaded per node. These can be cluster confi files etc.
     node_files_toupload.contents = Base64 encoded contents of the file to be uploaded on the node.
