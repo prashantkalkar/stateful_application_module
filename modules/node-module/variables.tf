@@ -42,6 +42,7 @@ variable "data_volume" {
     mount_params           = list(string)
     mount_path_owner_user  = string
     mount_path_owner_group = string
+    tags = optional(map(string), {})
   })
 }
 

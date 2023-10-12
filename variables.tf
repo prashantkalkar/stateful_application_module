@@ -30,6 +30,7 @@ variable "data_volume" {
     mount_params           = optional(list(string), [])
     mount_path_owner_user  = string
     mount_path_owner_group = string
+    tags                   = optional(map(string), {})
   })
   description = <<EOT
     device_name            = "Device name for additional Data volume, select name as per https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html"
