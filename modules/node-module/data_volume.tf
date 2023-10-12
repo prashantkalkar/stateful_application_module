@@ -12,7 +12,7 @@ resource "aws_ebs_volume" "node_data" {
   throughput        = var.data_volume.throughput_mib_per_sec
   encrypted         = true
 
-  tags = {
+  tags = merge({
     Name = "${var.app_name}-data-${format("%02d", var.node_index)}"
-  }
+  }, var.data_volume.tags)
 }
