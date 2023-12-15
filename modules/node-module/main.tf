@@ -71,7 +71,7 @@ locals {
     mount_path_owner_group       = var.data_volume.mount_path_owner_group
     node_files_toupload          = var.node_files_toupload
     node_config_script           = var.node_config_script
-    node_index                   = var.node_index
+    node_id                      = var.node_id
     node_ip                      = var.node_ip
   })
   asg_hook_name = "${var.app_name}-node-asg-hook"
@@ -110,7 +110,7 @@ resource "aws_launch_template" "node" {
   metadata_options {
     http_endpoint               = "enabled"
     http_protocol_ipv6          = "disabled"
-    http_put_response_hop_limit = 3
+    http_put_response_hop_limit = var.http_put_response_hop_limit
     http_tokens                 = "required"
   }
 

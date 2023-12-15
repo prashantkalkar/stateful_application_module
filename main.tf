@@ -1,6 +1,5 @@
 locals {
-  node_ids = [for node in var.nodes: node.node_id]
-  node_id_to_node_map = zipmap(local.node_ids, var.nodes)
+  node_id_to_node_map = {for node in var.nodes : node.node_id => node}
 }
 
 module "cluster_nodes" {
@@ -22,6 +21,7 @@ module "cluster_nodes" {
   asg_lifecycle_hook_heartbeat_timeout = var.asg_lifecycle_hook_heartbeat_timeout
   instance_type                        = var.instance_type
   root_volume                          = var.root_volume
+  http_put_response_hop_limit          = var.http_put_response_hop_limit
 }
 
 resource "null_resource" "roll_instances" {

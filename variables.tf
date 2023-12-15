@@ -110,3 +110,8 @@ variable "root_volume" {
     type = "gp3"
   }
 }
+
+variable "http_put_response_hop_limit" {
+  type = number
+  default = 1
+}
