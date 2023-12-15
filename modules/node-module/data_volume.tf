@@ -13,6 +13,6 @@ resource "aws_ebs_volume" "node_data" {
   encrypted         = true
 
   tags = merge({
-    Name = "${var.app_name}-data-${format("%02d", var.node_index)}"
+    Name = "${var.app_name}-data-${var.node_id}"
   }, var.data_volume.tags)
 }

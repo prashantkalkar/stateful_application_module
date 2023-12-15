@@ -4,7 +4,7 @@ resource "aws_network_interface" "node_network_interface" {
   private_ips     = [var.node_ip]
 
   tags = {
-    Name = "${var.app_name}-interface-${format("%02d", var.node_index)}"
+    Name = "${var.app_name}-interface-${var.node_id}"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_autoscaling_group" "node_asg" {
   tag {
     key                 = "Name"
     propagate_at_launch = true
-    value               = "${var.app_name}-node-${format("%02d", var.node_index)}"
+    value               = "${var.app_name}-node-${var.node_id}"
   }
 
   dynamic "tag" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_group" "node_asg" {
 data "aws_region" "current" {}
 
 locals {
-  asg_name = "${var.app_name}-node-${format("%02d", var.node_index)}"
+  asg_name = "${var.app_name}-node-${var.node_id}"
   userdata = templatefile("${path.module}/node_userdata.sh", {
     device_name                  = var.data_volume.device_name
     volume_id                    = aws_ebs_volume.node_data.id
@@ -78,7 +78,7 @@ locals {
 }
 
 resource "aws_launch_template" "node" {
-  name          = "${var.app_name}-node-${format("%02d", var.node_index)}"
+  name          = "${var.app_name}-node-${var.node_id}"
   image_id      = var.node_image
   instance_type = var.instance_type
 
@@ -121,6 +121,6 @@ resource "aws_launch_template" "node" {
   }
 
   tags = {
-    Name = "${var.app_name}-node-${format("%02d", var.node_index)}"
+    Name = "${var.app_name}-node-${var.node_id}"
   }
 }
