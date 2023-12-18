@@ -69,8 +69,8 @@ No modules.
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | n/a | yes |
 | <a name="input_node_config_script"></a> [node\_config\_script](#input\_node\_config\_script) | n/a | `string` | n/a | yes |
 | <a name="input_node_files_toupload"></a> [node\_files\_toupload](#input\_node\_files\_toupload) | n/a | <pre>list(object({<br>    contents = string<br>    destination = string<br>  }))</pre> | n/a | yes |
+| <a name="input_node_id"></a> [node\_id](#input\_node\_id) | n/a | `string` | n/a | yes |
 | <a name="input_node_image"></a> [node\_image](#input\_node\_image) | n/a | `string` | n/a | yes |
-| <a name="input_node_index"></a> [node\_index](#input\_node\_index) | n/a | `number` | n/a | yes |
 | <a name="input_node_instance_profile_id"></a> [node\_instance\_profile\_id](#input\_node\_instance\_profile\_id) | n/a | `string` | n/a | yes |
 | <a name="input_node_ip"></a> [node\_ip](#input\_node\_ip) | n/a | `string` | n/a | yes |
 | <a name="input_node_key_name"></a> [node\_key\_name](#input\_node\_key\_name) | n/a | `string` | n/a | yes |

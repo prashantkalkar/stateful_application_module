@@ -1,5 +1,6 @@
 variable "nodes" {
-  type = list(object({
+  type = set(object({
+    node_id = string
     node_ip = string
     node_image = optional(string)
     node_subnet_id = string
@@ -9,6 +10,7 @@ variable "nodes" {
     })), [])
   }))
   description = <<EOT
+    node_id = node identifier (this is not a index and need not in any specific ordered).
     node_ip = IP address of the cluster node. This should be available within the subnet.
     node_image = image for node of the cluster node.
     node_subnet_id = Id of the subnet where node should be created.
@@ -107,4 +109,9 @@ variable "root_volume" {
     size_in_gibs = 16
     type = "gp3"
   }
+}
+
+variable "http_put_response_hop_limit" {
+  type = number
+  default = 1
 }

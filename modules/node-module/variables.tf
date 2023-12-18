@@ -14,8 +14,8 @@ variable "node_ip" {
   type = string
 }
 
-variable "node_index" {
-  type = number
+variable "node_id" {
+  type = string
 }
 
 variable "instance_type" {
@@ -78,5 +78,9 @@ variable "command_timeout_seconds" {
 }
 
 variable "asg_lifecycle_hook_heartbeat_timeout" {
+  type = number
+}
+
+variable "http_put_response_hop_limit" {
   type = number
 }

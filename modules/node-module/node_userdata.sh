@@ -31,7 +31,7 @@ GROUP=${mount_path_owner_group}
 # shellcheck disable=SC2154
 NODE_CONFIG_SCRIPT=${node_config_script}
 # shellcheck disable=SC2154
-NODE_INDEX=${node_index}
+NODE_ID=${node_id}
 # shellcheck disable=SC2154
 NODE_IP=${node_ip}
 
@@ -72,10 +72,10 @@ echo "Calling the node configuration script"
 echo "$NODE_CONFIG_SCRIPT" | base64 --decode > node_config_script.sh
 chmod +x node_config_script.sh
 source node_config_script.sh
-configure_cluster_node "$NODE_INDEX" "$NODE_IP"
+configure_cluster_node "$NODE_ID" "$NODE_IP"
 
 # Check cluster health as a whole
-wait_for_healthy_cluster "$NODE_INDEX" "$NODE_IP"
+wait_for_healthy_cluster "$NODE_ID" "$NODE_IP"
 
 # Update AWS ASG hook status to proceed.
 aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE \
