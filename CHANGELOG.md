@@ -79,7 +79,12 @@ Upgrade notes:
 Breaking Changes:
 * Update to move away from index based node ordering. by @prashantkalkar in [#12](https://github.com/prashantkalkar/stateful_application_module/pull/12)
 * Added http_put_response_hop_limit as a module parameter with default value = 1. by @prashantkalkar in [#12](https://github.com/prashantkalkar/stateful_application_module/pull/12)
-* 
+
+Changes:
+- Added the output variable for the userdata script. This allows the caller to add the script to TF output variable.  
+  Any future changes in this variable will be highlighted during terraform plan allowing the user to see what is being changed in the instance.
+  by @prashantkalkar in [#13](https://github.com/prashantkalkar/stateful_application_module/pull/13)
+
 
 ## v0.3.0
 
