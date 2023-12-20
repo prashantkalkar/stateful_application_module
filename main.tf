@@ -26,8 +26,8 @@ module "cluster_nodes" {
 
 resource "null_resource" "roll_instances" {
   triggers = {
-    node_template  = join(",", module.cluster_nodes[*].launch_template_version)
-    asg_names      = join(" ", module.cluster_nodes[*].asg_name)
+    node_template  = join(",", [for node_id, module_output in module.cluster_nodes: module_output.launch_template_version])
+    asg_names      = join(" ", [for node_id, module_output in module.cluster_nodes: module_output.asg_name])
     rolling_script = filesha256("${path.module}/roll_cluster_instances.sh")
   }
 
