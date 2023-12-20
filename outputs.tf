@@ -6,6 +6,6 @@ output "asg_names" {
   value = [for node_id, module_output in module.cluster_nodes: module_output.asg_name]
 }
 
-output "node_userdata_script" {
-  value = module.cluster_nodes.node_userdata_script
+output "node_id_to_node_userdata_script_map" {
+  value = {for node_id, module_output in module.cluster_nodes: node_id => module_output.node_userdata_script}
 }

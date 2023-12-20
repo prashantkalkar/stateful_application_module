@@ -190,5 +190,5 @@ https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ubuntu-secondary-netw
 |------|-------------|
 | <a name="output_asg_names"></a> [asg\_names](#output\_asg\_names) | n/a |
 | <a name="output_node_iam_role_name"></a> [node\_iam\_role\_name](#output\_node\_iam\_role\_name) | n/a |
-| <a name="output_node_userdata_script"></a> [node\_userdata\_script](#output\_node\_userdata\_script) | n/a |
+| <a name="output_node_id_to_node_userdata_script_map"></a> [node\_id\_to\_node\_userdata\_script\_map](#output\_node\_id\_to\_node\_userdata\_script\_map) | n/a |
 <!-- END_TF_DOCS -->
