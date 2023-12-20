@@ -65,6 +65,7 @@ No modules.
 | <a name="input_asg_lifecycle_hook_heartbeat_timeout"></a> [asg\_lifecycle\_hook\_heartbeat\_timeout](#input\_asg\_lifecycle\_hook\_heartbeat\_timeout) | n/a | `number` | n/a | yes |
 | <a name="input_command_timeout_seconds"></a> [command\_timeout\_seconds](#input\_command\_timeout\_seconds) | n/a | `number` | n/a | yes |
 | <a name="input_data_volume"></a> [data\_volume](#input\_data\_volume) | n/a | <pre>object({<br>    device_name            = string<br>    size_in_gibs           = number<br>    type                   = string<br>    iops                   = optional(number)<br>    throughput_mib_per_sec = optional(number)<br>    mount_path             = string<br>    file_system_type       = string<br>    mount_params           = list(string)<br>    mount_path_owner_user  = string<br>    mount_path_owner_group = string<br>    tags = optional(map(string), {})<br>  })</pre> | n/a | yes |
+| <a name="input_http_put_response_hop_limit"></a> [http\_put\_response\_hop\_limit](#input\_http\_put\_response\_hop\_limit) | n/a | `number` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | n/a | `string` | n/a | yes |
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | n/a | yes |
 | <a name="input_node_config_script"></a> [node\_config\_script](#input\_node\_config\_script) | n/a | `string` | n/a | yes |
@@ -84,4 +85,5 @@ No modules.
 |------|-------------|
 | <a name="output_asg_name"></a> [asg\_name](#output\_asg\_name) | n/a |
 | <a name="output_launch_template_version"></a> [launch\_template\_version](#output\_launch\_template\_version) | n/a |
+| <a name="output_node_userdata_script"></a> [node\_userdata\_script](#output\_node\_userdata\_script) | n/a |
 <!-- END_TF_DOCS -->

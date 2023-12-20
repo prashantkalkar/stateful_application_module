@@ -76,6 +76,15 @@ def checkovConfigCheck = tasks.register('checkovConfigCheck') {
   }
 }
 
+def terraformDoc = tasks.register('terraformDoc') {
+  inputs.files(fileTree(".").filter { File f ->
+    f.name.endsWith(".tf")
+  })
+  doLast {
+    exec { commandLine "terraform-docs", "." }
+  }
+}
+
 clean.dependsOn(cleanTfInit)
 clean.dependsOn(cleanTfsec)
 clean.dependsOn(cleanCheckovConfigCheck)
@@ -85,10 +94,10 @@ check.dependsOn(tfValidate)
 check.dependsOn(tflint)
 check.dependsOn(tfsec)
 
-
 tflint.configure { shouldRunAfter(tfValidate) }
 tfsec.configure { shouldRunAfter(tflint) }
 checkovConfigCheck.configure { shouldRunAfter(tfsec) }
 
 assemble.dependsOn(check)
+assemble.dependsOn(terraformDoc)
 

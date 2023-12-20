@@ -3,5 +3,9 @@ output "node_iam_role_name" {
 }
 
 output "asg_names" {
-  value = module.cluster_nodes[*].asg_name
+  value = [for node_id, module_output in module.cluster_nodes: module_output.asg_name]
+}
+
+output "node_userdata_script" {
+  value = module.cluster_nodes.node_userdata_script
 }
