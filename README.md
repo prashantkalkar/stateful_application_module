@@ -22,19 +22,19 @@ module "cluster" {
   nodes         = [
     {
       node_ip             = "<InstanceIPToBeAllocated>"
-      node_id             = "1"
+      node_id             = "<NodeId>" # should be unique
       node_subnet_id      = "<subnet_id>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
-      node_id        = "1"
+      node_id        = "<NodeId>"
       node_subnet_id = "<subnet_id>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
-      node_id        = "1"
+      node_id        = "<NodeId>"
       node_subnet_id = "<subnet_id>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     }
@@ -122,7 +122,7 @@ This should allow the instance to become InService. Rolling script should eventu
 **3. I have more than one instance in non InService state. What should I do?**
 Ideally, the cluster should never get into the state where there are multiple instances failed. This will cause the cluster to be unavailable.
 If the issue has occurred during the terraform rolling update script, then can also be a bug with the script. Please report the issue.
-If the failure has occurred at runtime (not during terraform apply), then ideally instances should be automatically recovered unless infrastucture is manually changed to cause the failure during instance recovery.
+If the failure has occurred at runtime (not during terraform apply), then ideally instances should be automatically recovered unless infrastructure is manually changed to cause the failure during instance recovery.
 Try to follow the FQA 1 and 2 to debug and recover the infrastructure to desired state.
 
 ## References:
