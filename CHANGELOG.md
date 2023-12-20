@@ -1,4 +1,4 @@
-## Unreleased
+## v0.4.0
 
 Upgrade notes:
 * node_id argument change: The nodes array now require a node_id parameter. This id is used to identify and name the node in the cluster and for naming the AWS resources. 
