@@ -22,16 +22,19 @@ module "cluster" {
   nodes         = [
     {
       node_ip             = "<InstanceIPToBeAllocated>"
+      node_id             = "<NodeId>" # should be unique
       node_subnet_id      = "<subnet_id>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
+      node_id        = "<NodeId>"
       node_subnet_id = "<subnet_id>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
+      node_id        = "<NodeId>"
       node_subnet_id = "<subnet_id>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     }
@@ -48,7 +51,6 @@ module "cluster" {
     type                   = "gp3"
     mount_params           = ["noatime"]
   }
-  node_image = "<ami_id>"
 }
 ```
 
@@ -56,14 +58,14 @@ module "cluster" {
 ### A bit about stateful application
 
 #### Node identity
-For an stateful application cluster, every node needs to have an **unique identity**. This is required sometime to know which node is the leader and which nodes are followers. In other cases it is required to know which node in the cluster has what data. The node identity has to persist even when node is destroyed and recreated. This is completely different that stateless application when it does not matter which node you are talking to, as all nodes are identical. 
+For a stateful application cluster, every node needs to have an **unique identity**. This is required sometime to know which node is the leader and which nodes are followers. In other cases it is required to know which node in the cluster has what data. The node identity has to persist even when node is destroyed and recreated. This is completely different that stateless application when it does not matter which node you are talking to, as all nodes are identical. 
 The node identity is generally provided with the help of **fixed node IPs** or **fixed hostnames**.
 
 #### Cluster Quorum and rolling updates
-For highly available clusters, majority of nodes has to be running. This majority is called as quorum. For an cluster of n nodes, the quorum is represented by n/2 + 1 nodes. 
+For highly available clusters, the majority of nodes has to be running. This majority is called as quorum. For a cluster of n nodes, the quorum is represented by n/2 + 1 nodes. 
 to provide high availability. The cluster can remain available as long as nodes equals to the quorum are running. In other words, the cluster can service crash of nodes above the quorum size.  For example, for a 3 nodes cluster, quorum size is 2 and hence it can service 1 node crash. Similar, 5 node cluster can service 2 node crashes at the same time. 
 Any cluster automation assumes that minimum cluster size is 3 to allow a single node crash. This allows the automation to perform rolling update one node at a time. Since cluster size should service single node cluster, the cluster will remain fully operational while performing rolling update. 
-For stateful application every decision like rolling updates or replacement of unhealthy nodes etc should be taken at cluster level rather than locally at node level. 
+For stateful application every decision like rolling updates or replacement of unhealthy nodes etc. should be taken at cluster level rather than locally at node level. 
 
 ### Module challenges 
 1. To solve the **identity problem** of the nodes, a external ENI is created. This ENI is then attached to every node launch template. This ENI retains the IP address even when node is recreated. The new replaced instance will resume the same IP address and hence same identity in the cluster. 
@@ -78,7 +80,7 @@ The module will create cluster nodes depending on the cluster size requested (ge
 ![alt text](https://github.com/prashantkalkar/stateful_application_module/blob/main/_docs/architecture.png?raw=true)
 
 The module creates mainly following resources per node (as shown in the image above)
-- Auto scaling group with min max set to 1. 
+- Auto-scaling group with min max set to 1. 
 - External Elastic Network interface (ENI) with IP address as requested. 
 - Elastic block storage (EBS) as requested.
 - Launch template with user data script to mount the EBS volume and to perform health checks (user data script has 2 parts one part has to be provided by module user. Another part is maintained within the module and calls the user provided script).
@@ -88,7 +90,7 @@ Apart from above resources, the module also include a rolling update script to u
 
 When the cluster node is created or is replaced (due to modifications), the ASG lifecycle hook puts the node in a `Pending:Wait` state. The instance will remain in this state unless lifecycle action is not marked as complete (with continue). At the end of module user data script called the complete continue command on the instance lifecycle hook to complete the instance startup process. The userdata script also perform the cluster health check to ensure that node has joined the cluster successfully (this cluster health check function has to provided by the module user which is called from the module userdata script). The cluster health check happens before the lifecycle hook action. 
 
-This ensures that instance is shown as `InService` only after successful completion on user data script and also checking the cluster health status.  The above mentioned rolling update script waits for the instance to be `InService` before updating other instances in the service. The script will timeout for any failed instance which is stuck in `Pending:Wait` state due to failure of the user data script. (Refer to FAQs if this happens). That way, other cluster nodes are not updated with a failed change preventing any downtime (single node failure generally does not cause cluster unavailability due to quorum)
+This ensures that instance is shown as `InService` only after successful completion on user data script and also checking the cluster health status.  The above-mentioned rolling update script waits for the instance to be `InService` before updating other instances in the service. The script will timeout for any failed instance which is stuck in `Pending:Wait` state due to failure of the user data script. (Refer to FAQs if this happens). That way, other cluster nodes are not updated with a failed change preventing any downtime (single node failure generally does not cause cluster unavailability due to quorum)
 
 
 ## FAQs
@@ -120,7 +122,7 @@ This should allow the instance to become InService. Rolling script should eventu
 **3. I have more than one instance in non InService state. What should I do?**
 Ideally, the cluster should never get into the state where there are multiple instances failed. This will cause the cluster to be unavailable.
 If the issue has occurred during the terraform rolling update script, then can also be a bug with the script. Please report the issue.
-If the failure has occurred at runtime (not during terraform apply), then ideally instances should be automatically recovered unless infrastucture is manually changed to cause the failure during instance recovery.
+If the failure has occurred at runtime (not during terraform apply), then ideally instances should be automatically recovered unless infrastructure is manually changed to cause the failure during instance recovery.
 Try to follow the FQA 1 and 2 to debug and recover the infrastructure to desired state.
 
 ## References:
