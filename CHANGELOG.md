@@ -1,5 +1,4 @@
-## v0.4.1
-
+## Unreleased
 Upgrade notes:
 * node_files argument added: Due to possible terraform `sensitive` issues, the files that are to be uploaded to a node will need to be specified separately. 
   For existing code change as follows:
@@ -24,10 +23,8 @@ Upgrade notes:
     ```
   Note, the node_id can be any string but if you want to retain the node names use the 2 digit node_id (eg. 00, 01, 05, 10 etc) during the upgrades.
 
-Changes:
+Breaking Changes: 
 * added node_files argument by @ganesh-arkalgud in [#17](https://github.com/prashantkalkar/stateful_application_module/pull/17)
-
-Full Changelog: [v0.4.0...v0.4.1](https://github.com/prashantkalkar/stateful_application_module/compare/v0.4.0...v0.4.1)
 
 ## v0.4.0
 
