@@ -5,6 +5,7 @@ Upgrade notes:
     ```terraform
       nodes         = [{
         node_ip             = "172.31.140.18"
+        node_id             = "00"
         node_subnet_id      = data.aws_subnet.subnet1.id
         node_files_toupload = []
       }]
