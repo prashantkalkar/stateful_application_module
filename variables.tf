@@ -16,12 +16,11 @@ variable "nodes" {
 variable "node_files" {
   type = set(object({
     node_id = string
-    node_files_toupload = list(object({
+    node_files_toupload = optional(list(object({
       contents = string
       destination = string
-    }))
+    })), [])
   }))
-
   description = <<EOT
     node_id = node identifier (this is not a index and need not in any specific ordered).
     node_files_toupload = list of file to be uploaded per node. These can be cluster config files etc.
