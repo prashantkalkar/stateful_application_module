@@ -24,18 +24,29 @@ module "cluster" {
       node_ip             = "<InstanceIPToBeAllocated>"
       node_id             = "<NodeId>" # should be unique
       node_subnet_id      = "<subnet_id>"
-      node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
       node_id        = "<NodeId>"
       node_subnet_id = "<subnet_id>"
-      node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
       node_id        = "<NodeId>"
       node_subnet_id = "<subnet_id>"
+    }
+  ]
+  node_files         = [
+    {
+      node_id             = "<NodeId>" # should be unique
+      node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
+    },
+    {
+      node_id        = "<NodeId>"
+      node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
+    },
+    {
+      node_id        = "<NodeId>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     }
   ]

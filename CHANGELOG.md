@@ -1,3 +1,34 @@
+## v0.4.1
+
+Upgrade notes:
+* node_files argument added: Due to possible terraform `sensitive` issues, the files that are to be uploaded to a node will need to be specified separately. 
+  For existing code change as follows:
+    ```terraform
+      nodes         = [{
+        node_ip             = "172.31.140.18"
+        node_subnet_id      = data.aws_subnet.subnet1.id
+        node_files_toupload = []
+      }]
+    ```
+  To new code
+    ```terraform
+      nodes         = [{
+        node_ip             = "172.31.140.18"
+        node_id             = "00"
+        node_subnet_id      = data.aws_subnet.subnet1.id
+      }]
+      node_files    = [{
+        node_id             = "00"
+        node_files_toupload = []
+      }]
+    ```
+  Note, the node_id can be any string but if you want to retain the node names use the 2 digit node_id (eg. 00, 01, 05, 10 etc) during the upgrades.
+
+Changes:
+* added node_files argument by @ganesh-arkalgud in [#17](https://github.com/prashantkalkar/stateful_application_module/pull/17)
+
+Full Changelog: [v0.4.0...v0.4.1](https://github.com/prashantkalkar/stateful_application_module/compare/v0.4.0...v0.4.1)
+
 ## v0.4.0
 
 Upgrade notes:
