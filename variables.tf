@@ -4,6 +4,18 @@ variable "nodes" {
     node_ip = string
     node_image = optional(string)
     node_subnet_id = string
+  }))
+  description = <<EOT
+    node_id = node identifier (this is not a index and need not in any specific ordered).
+    node_ip = IP address of the cluster node. This should be available within the subnet.
+    node_image = image for node of the cluster node.
+    node_subnet_id = Id of the subnet where node should be created.
+  EOT
+}
+
+variable "node_files" {
+  type = set(object({
+    node_id = string
     node_files_toupload = optional(list(object({
       contents = string
       destination = string
@@ -11,10 +23,7 @@ variable "nodes" {
   }))
   description = <<EOT
     node_id = node identifier (this is not a index and need not in any specific ordered).
-    node_ip = IP address of the cluster node. This should be available within the subnet.
-    node_image = image for node of the cluster node.
-    node_subnet_id = Id of the subnet where node should be created.
-    node_files_toupload = list of file to be uploaded per node. These can be cluster confi files etc.
+    node_files_toupload = list of file to be uploaded per node. These can be cluster config files etc.
     node_files_toupload.contents = Base64 encoded contents of the file to be uploaded on the node.
     node_files_toupload.destination = File destination on the node. This will be the file path and name on the node. The file ownership should be changed by node_config_script.
   EOT
