@@ -13,7 +13,7 @@ module "cluster_nodes" {
   node_ip                              = each.value.node_ip
   node_key_name                        = var.node_key_name
   node_subnet_id                       = each.value.node_subnet_id
-  node_files_toupload                 = lookup(local.node_id_to_node_files_map, each.key).node_files_toupload
+  node_files_toupload                  = local.node_id_to_node_files_map[each.key].node_files_toupload
   node_config_script                   = var.node_config_script
   security_groups                      = var.security_groups
   node_image                           = each.value.node_image != null ? each.value.node_image : var.node_image
