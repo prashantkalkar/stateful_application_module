@@ -27,6 +27,8 @@ Upgrade notes:
 Breaking Changes: 
 * added node_files argument: Terraform plan was failing when sensitive files are used for node uploads. This was happening due to node usage in the for_each attribute. Terraform plan fails if sensitive data is used for either keys or values for `for_each` property (see [issue#16](https://github.com/prashantkalkar/stateful_application_module/issues/16))  by @ganesh-arkalgud in [#17](https://github.com/prashantkalkar/stateful_application_module/pull/17)
 
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/prashantkalkar/stateful_application_module/compare/v0.4.0...v0.5.0)
+
 ## v0.4.0
 
 Upgrade notes:
