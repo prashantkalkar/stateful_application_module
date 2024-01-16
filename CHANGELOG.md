@@ -1,6 +1,7 @@
-## Unreleased
+## v0.5.0
+
 Upgrade notes:
-* node_files argument added: Due to possible terraform `sensitive` issues, the files that are to be uploaded to a node will need to be specified separately. 
+* node_files argument added: Terraform plan was failing when sensitive files are used for node uploads. This was happening due to node usage in the for_each attribute. Terraform plan fails if sensitive data is used for either keys or values for `for_each` property (see [issue#16](https://github.com/prashantkalkar/stateful_application_module/issues/16)).  
   For existing code change as follows:
     ```terraform
       nodes         = [{
@@ -22,10 +23,9 @@ Upgrade notes:
         node_files_toupload = []
       }]
     ```
-  Note, the node_id can be any string but if you want to retain the node names use the 2 digit node_id (eg. 00, 01, 05, 10 etc) during the upgrades.
 
 Breaking Changes: 
-* added node_files argument by @ganesh-arkalgud in [#17](https://github.com/prashantkalkar/stateful_application_module/pull/17)
+* added node_files argument: Terraform plan was failing when sensitive files are used for node uploads. This was happening due to node usage in the for_each attribute. Terraform plan fails if sensitive data is used for either keys or values for `for_each` property (see [issue#16](https://github.com/prashantkalkar/stateful_application_module/issues/16))  by @ganesh-arkalgud in [#17](https://github.com/prashantkalkar/stateful_application_module/pull/17)
 
 ## v0.4.0
 
