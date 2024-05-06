@@ -4,12 +4,14 @@ variable "nodes" {
     node_ip = string
     node_image = optional(string)
     node_subnet_id = string
+    node_data_disk = optional(map(string), {})
   }))
   description = <<EOT
     node_id = node identifier (this is not a index and need not in any specific ordered).
     node_ip = IP address of the cluster node. This should be available within the subnet.
     node_image = image for node of the cluster node.
     node_subnet_id = Id of the subnet where node should be created.
+    node_data_disk = override the default data disk configuration for the node. (follow the same schema of data disk).
   EOT
 }
 
@@ -29,7 +31,7 @@ variable "node_files" {
   EOT
 }
 
-variable "data_volume" {
+variable "default_data_volume" {
   type = object({
     device_name            = optional(string, "/dev/sdf")
     size_in_gibs           = number
@@ -44,15 +46,16 @@ variable "data_volume" {
     tags                   = optional(map(string), {})
   })
   description = <<EOT
-    device_name            = "Device name for additional Data volume, select name as per https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html"
-    type                   = "EBS volume type e.g. gp2, gp3 etc"
-    iops                   = "Only valid for type gp3"
-    throughput_mib_per_sec = "only valid for type gp3"
-    mount_path             = "path where to mount the data volume"
-    file_system_type       = "File system to use to format the volume. eg. ext4 or xfs. This is used only initial time. Later changes will be ignored"
-    mount_params           = "Parameters to be used while mounting the volume eg. noatime etc. Optional, empty if not provided"
-    mount_path_owner_user  = "OS user that should own volume mount path will be used for chown"
-    mount_path_owner_group = "OS group that should own the volume mount path, will be used for chown"
+    This is default data volume configuration. This can be selectively overridden at node config level
+      device_name            = "Device name for additional Data volume, select name as per https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html"
+      type                   = "EBS volume type e.g. gp2, gp3 etc"
+      iops                   = "Only valid for type gp3"
+      throughput_mib_per_sec = "only valid for type gp3"
+      mount_path             = "path where to mount the data volume"
+      file_system_type       = "File system to use to format the volume. eg. ext4 or xfs. This is used only initial time. Later changes will be ignored"
+      mount_params           = "Parameters to be used while mounting the volume eg. noatime etc. Optional, empty if not provided"
+      mount_path_owner_user  = "OS user that should own volume mount path will be used for chown"
+      mount_path_owner_group = "OS group that should own the volume mount path, will be used for chown"
   EOT
 }
 

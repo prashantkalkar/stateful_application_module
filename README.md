@@ -17,13 +17,13 @@ Note: Currently only Amazon Linux based AMI is supported. The script is written 
 module "cluster" {
   source        = "git::git@github.com:prashantkalkar/stateful_application_module.git?ref=<version-git-tag>"
   app_name      = "cluster-test-setup"
-  node_image = "<ami_id>"
+  node_image    = "<ami_id>"
   node_key_name = "my-keypair"
   nodes         = [
     {
-      node_ip             = "<InstanceIPToBeAllocated>"
-      node_id             = "<NodeId>" # should be unique
-      node_subnet_id      = "<subnet_id>"
+      node_ip        = "<InstanceIPToBeAllocated>"
+      node_id = "<NodeId>" # should be unique
+      node_subnet_id = "<subnet_id>"
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
@@ -36,24 +36,24 @@ module "cluster" {
       node_subnet_id = "<subnet_id>"
     }
   ]
-  node_files         = [
+  node_files = [
     {
-      node_id             = "<NodeId>" # should be unique
+      node_id = "<NodeId>" # should be unique
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
-      node_id        = "<NodeId>"
+      node_id             = "<NodeId>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
-      node_id        = "<NodeId>"
+      node_id             = "<NodeId>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     }
   ]
   node_config_script = filebase64("${path.module}/node_config_script.sh")
   security_groups    = [aws_security_group.cluster_sg.id]
   instance_type      = "<node_instance_type>"
-  data_volume        = {
+  default_data_volume = {
     file_system_type       = "xfs"
     mount_path             = "/mydata"
     mount_path_owner_user  = "ec2-user"
