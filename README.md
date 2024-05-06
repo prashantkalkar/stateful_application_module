@@ -17,13 +17,13 @@ Note: Currently only Amazon Linux based AMI is supported. The script is written 
 module "cluster" {
   source        = "git::git@github.com:prashantkalkar/stateful_application_module.git?ref=<version-git-tag>"
   app_name      = "cluster-test-setup"
-  node_image = "<ami_id>"
+  node_image    = "<ami_id>"
   node_key_name = "my-keypair"
   nodes         = [
     {
-      node_ip             = "<InstanceIPToBeAllocated>"
-      node_id             = "<NodeId>" # should be unique
-      node_subnet_id      = "<subnet_id>"
+      node_ip        = "<InstanceIPToBeAllocated>"
+      node_id = "<NodeId>" # should be unique
+      node_subnet_id = "<subnet_id>"
     },
     {
       node_ip        = "<InstanceIPToBeAllocated>"
@@ -36,24 +36,24 @@ module "cluster" {
       node_subnet_id = "<subnet_id>"
     }
   ]
-  node_files         = [
+  node_files = [
     {
-      node_id             = "<NodeId>" # should be unique
+      node_id = "<NodeId>" # should be unique
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
-      node_id        = "<NodeId>"
+      node_id             = "<NodeId>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     },
     {
-      node_id        = "<NodeId>"
+      node_id             = "<NodeId>"
       node_files_toupload = [filebase64("${path.module}/config_file.cfg")]
     }
   ]
   node_config_script = filebase64("${path.module}/node_config_script.sh")
   security_groups    = [aws_security_group.cluster_sg.id]
   instance_type      = "<node_instance_type>"
-  data_volume        = {
+  default_data_volume = {
     file_system_type       = "xfs"
     mount_path             = "/mydata"
     mount_path_owner_user  = "ec2-user"
@@ -189,7 +189,7 @@ https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ubuntu-secondary-netw
 | <a name="input_asg_inservice_timeout_in_mins"></a> [asg\_inservice\_timeout\_in\_mins](#input\_asg\_inservice\_timeout\_in\_mins) | Timeout in mins which will be used by the rolling update script to wait for instances to be InService for an ASG | `number` | `10` | no |
 | <a name="input_asg_lifecycle_hook_heartbeat_timeout"></a> [asg\_lifecycle\_hook\_heartbeat\_timeout](#input\_asg\_lifecycle\_hook\_heartbeat\_timeout) | Timeout for ASG initial lifecycle hook. This is used only during ASG creation, subsequent value changes are not handled by terraform (has to be updated manually) | `number` | `3600` | no |
 | <a name="input_command_timeout_seconds"></a> [command\_timeout\_seconds](#input\_command\_timeout\_seconds) | The timeout that will be used by the userdata script to retry commands on failure. Keep it higher to allow manual recovery | `number` | `1800` | no |
-| <a name="input_data_volume"></a> [data\_volume](#input\_data\_volume) | device\_name            = "Device name for additional Data volume, select name as per https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html"<br>    type                   = "EBS volume type e.g. gp2, gp3 etc"<br>    iops                   = "Only valid for type gp3"<br>    throughput\_mib\_per\_sec = "only valid for type gp3"<br>    mount\_path             = "path where to mount the data volume"<br>    file\_system\_type       = "File system to use to format the volume. eg. ext4 or xfs. This is used only initial time. Later changes will be ignored"<br>    mount\_params           = "Parameters to be used while mounting the volume eg. noatime etc. Optional, empty if not provided"<br>    mount\_path\_owner\_user  = "OS user that should own volume mount path will be used for chown"<br>    mount\_path\_owner\_group = "OS group that should own the volume mount path, will be used for chown" | <pre>object({<br>    device_name            = optional(string, "/dev/sdf")<br>    size_in_gibs           = number<br>    type                   = string<br>    iops                   = optional(number)<br>    throughput_mib_per_sec = optional(number)<br>    mount_path             = string<br>    file_system_type       = string<br>    mount_params           = optional(list(string), [])<br>    mount_path_owner_user  = string<br>    mount_path_owner_group = string<br>    tags                   = optional(map(string), {})<br>  })</pre> | n/a | yes |
+| <a name="input_default_data_volume"></a> [default\_data\_volume](#input\_default\_data\_volume) | This is default data volume configuration. This can be selectively overridden at node config level<br>      device\_name            = "Device name for additional Data volume, select name as per https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html"<br>      type                   = "EBS volume type e.g. gp2, gp3 etc"<br>      iops                   = "Only valid for type gp3"<br>      throughput\_mib\_per\_sec = "only valid for type gp3"<br>      mount\_path             = "path where to mount the data volume"<br>      file\_system\_type       = "File system to use to format the volume. eg. ext4 or xfs. This is used only initial time. Later changes will be ignored"<br>      mount\_params           = "Parameters to be used while mounting the volume eg. noatime etc. Optional, empty if not provided"<br>      mount\_path\_owner\_user  = "OS user that should own volume mount path will be used for chown"<br>      mount\_path\_owner\_group = "OS group that should own the volume mount path, will be used for chown" | <pre>object({<br>    device_name            = optional(string, "/dev/sdf")<br>    size_in_gibs           = number<br>    type                   = string<br>    iops                   = optional(number)<br>    throughput_mib_per_sec = optional(number)<br>    mount_path             = string<br>    file_system_type       = string<br>    mount_params           = optional(list(string), [])<br>    mount_path_owner_user  = string<br>    mount_path_owner_group = string<br>    tags                   = optional(map(string), {})<br>  })</pre> | n/a | yes |
 | <a name="input_http_put_response_hop_limit"></a> [http\_put\_response\_hop\_limit](#input\_http\_put\_response\_hop\_limit) | n/a | `number` | `1` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | n/a | `string` | n/a | yes |
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | `"https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"` | no |
@@ -197,7 +197,7 @@ https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ubuntu-secondary-netw
 | <a name="input_node_files"></a> [node\_files](#input\_node\_files) | node\_id = node identifier (this is not a index and need not in any specific ordered).<br>    node\_files\_toupload = list of file to be uploaded per node. These can be cluster config files etc.<br>    node\_files\_toupload.contents = Base64 encoded contents of the file to be uploaded on the node.<br>    node\_files\_toupload.destination = File destination on the node. This will be the file path and name on the node. The file ownership should be changed by node\_config\_script. | <pre>set(object({<br>    node_id = string<br>    node_files_toupload = optional(list(object({<br>      contents = string<br>      destination = string<br>    })), [])<br>  }))</pre> | n/a | yes |
 | <a name="input_node_image"></a> [node\_image](#input\_node\_image) | n/a | `string` | n/a | yes |
 | <a name="input_node_key_name"></a> [node\_key\_name](#input\_node\_key\_name) | n/a | `string` | n/a | yes |
-| <a name="input_nodes"></a> [nodes](#input\_nodes) | node\_id = node identifier (this is not a index and need not in any specific ordered).<br>    node\_ip = IP address of the cluster node. This should be available within the subnet.<br>    node\_image = image for node of the cluster node.<br>    node\_subnet\_id = Id of the subnet where node should be created. | <pre>set(object({<br>    node_id = string<br>    node_ip = string<br>    node_image = optional(string)<br>    node_subnet_id = string<br>  }))</pre> | n/a | yes |
+| <a name="input_nodes"></a> [nodes](#input\_nodes) | node\_id = node identifier (this is not a index and need not in any specific ordered).<br>    node\_ip = IP address of the cluster node. This should be available within the subnet.<br>    node\_image = image for node of the cluster node.<br>    node\_subnet\_id = Id of the subnet where node should be created.<br>    node\_data\_disk = override the default data disk configuration for the node. (follow the same schema of data disk). | <pre>set(object({<br>    node_id = string<br>    node_ip = string<br>    node_image = optional(string)<br>    node_subnet_id = string<br>    node_data_disk = optional(map(string), {})<br>  }))</pre> | n/a | yes |
 | <a name="input_root_volume"></a> [root\_volume](#input\_root\_volume) | n/a | <pre>object({<br>    device_name = string<br>    size_in_gibs = number<br>    type = string<br>  })</pre> | <pre>{<br>  "device_name": "/dev/xvda",<br>  "size_in_gibs": 16,<br>  "type": "gp3"<br>}</pre> | no |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | n/a | `list(string)` | n/a | yes |
 

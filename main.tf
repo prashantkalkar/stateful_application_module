@@ -7,7 +7,7 @@ module "cluster_nodes" {
   for_each                             = local.node_id_to_node_map
   source                               = "./modules/node-module"
   app_name                             = var.app_name
-  data_volume                          = var.data_volume
+  data_volume                          = merge(var.default_data_volume, each.value.node_data_disk)
   node_id                              = each.key
   node_instance_profile_id             = aws_iam_instance_profile.node_instance_profile.id
   node_ip                              = each.value.node_ip
