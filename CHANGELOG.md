@@ -19,6 +19,8 @@ Breaking Changes:
 * Renamed the data_volume variable as default_data_volume. The new configuration represent default data disk config which will be used by all the nodes. 
   This can be overridden at node level by providing selectively different values for the values. (See the input variable documents)
 
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/prashantkalkar/stateful_application_module/compare/v0.5.0...v0.6.0)
+
 ## v0.5.0
 
 Upgrade notes:
