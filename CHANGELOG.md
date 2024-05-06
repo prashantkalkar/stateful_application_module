@@ -1,5 +1,24 @@
 ## Unreleased
 
+Upgrade notes:
+* Renamed the `data_volume` variable to `default_data_volume`. The data disk config now represent default disk configuration. 
+  This is overridable at node level if required.
+  For existing code change as follows:
+    ```terraform
+      data_volume = {
+        # ...
+      }
+    ```
+  To new code
+    ```terraform
+      default_data_volume = {
+        # ...
+      }
+    ```
+Breaking Changes:
+* Renamed the data_volume variable as default_data_volume. The new configuration represent default data disk config which will be used by all the nodes. 
+  This can be overridden at node level by providing selectively different values for the values. (See the input variable documents)
+
 ## v0.5.0
 
 Upgrade notes:
