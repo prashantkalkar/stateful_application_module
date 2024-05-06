@@ -1,4 +1,4 @@
-## Unreleased
+## v0.6.0
 
 Upgrade notes:
 * Renamed the `data_volume` variable to `default_data_volume`. The data disk config now represent default disk configuration. 
