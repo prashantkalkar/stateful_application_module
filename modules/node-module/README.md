@@ -64,19 +64,19 @@ No modules.
 | <a name="input_app_name"></a> [app\_name](#input\_app\_name) | n/a | `string` | n/a | yes |
 | <a name="input_asg_lifecycle_hook_heartbeat_timeout"></a> [asg\_lifecycle\_hook\_heartbeat\_timeout](#input\_asg\_lifecycle\_hook\_heartbeat\_timeout) | n/a | `number` | n/a | yes |
 | <a name="input_command_timeout_seconds"></a> [command\_timeout\_seconds](#input\_command\_timeout\_seconds) | n/a | `number` | n/a | yes |
-| <a name="input_data_volume"></a> [data\_volume](#input\_data\_volume) | n/a | <pre>object({<br>    device_name            = string<br>    size_in_gibs           = number<br>    type                   = string<br>    iops                   = optional(number)<br>    throughput_mib_per_sec = optional(number)<br>    mount_path             = string<br>    file_system_type       = string<br>    mount_params           = list(string)<br>    mount_path_owner_user  = string<br>    mount_path_owner_group = string<br>    tags = optional(map(string), {})<br>  })</pre> | n/a | yes |
+| <a name="input_data_volume"></a> [data\_volume](#input\_data\_volume) | n/a | <pre>object({<br/>    device_name            = string<br/>    size_in_gibs           = number<br/>    type                   = string<br/>    iops                   = optional(number)<br/>    throughput_mib_per_sec = optional(number)<br/>    mount_path             = string<br/>    file_system_type       = string<br/>    mount_params           = list(string)<br/>    mount_path_owner_user  = string<br/>    mount_path_owner_group = string<br/>    tags = optional(map(string), {})<br/>  })</pre> | n/a | yes |
 | <a name="input_http_put_response_hop_limit"></a> [http\_put\_response\_hop\_limit](#input\_http\_put\_response\_hop\_limit) | n/a | `number` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | n/a | `string` | n/a | yes |
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | n/a | yes |
 | <a name="input_node_config_script"></a> [node\_config\_script](#input\_node\_config\_script) | n/a | `string` | n/a | yes |
-| <a name="input_node_files_toupload"></a> [node\_files\_toupload](#input\_node\_files\_toupload) | n/a | <pre>list(object({<br>    contents = string<br>    destination = string<br>  }))</pre> | n/a | yes |
+| <a name="input_node_files_toupload"></a> [node\_files\_toupload](#input\_node\_files\_toupload) | n/a | <pre>list(object({<br/>    contents = string<br/>    destination = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_node_id"></a> [node\_id](#input\_node\_id) | n/a | `string` | n/a | yes |
 | <a name="input_node_image"></a> [node\_image](#input\_node\_image) | n/a | `string` | n/a | yes |
 | <a name="input_node_instance_profile_id"></a> [node\_instance\_profile\_id](#input\_node\_instance\_profile\_id) | n/a | `string` | n/a | yes |
 | <a name="input_node_ip"></a> [node\_ip](#input\_node\_ip) | n/a | `string` | n/a | yes |
 | <a name="input_node_key_name"></a> [node\_key\_name](#input\_node\_key\_name) | n/a | `string` | n/a | yes |
 | <a name="input_node_subnet_id"></a> [node\_subnet\_id](#input\_node\_subnet\_id) | n/a | `string` | n/a | yes |
-| <a name="input_root_volume"></a> [root\_volume](#input\_root\_volume) | n/a | <pre>object({<br>    device_name = string<br>    size_in_gibs = number<br>    type = string<br>  })</pre> | n/a | yes |
+| <a name="input_root_volume"></a> [root\_volume](#input\_root\_volume) | n/a | <pre>object({<br/>    device_name = string<br/>    size_in_gibs = number<br/>    type = string<br/>  })</pre> | n/a | yes |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | n/a | `list(string)` | n/a | yes |
 
 ## Outputs

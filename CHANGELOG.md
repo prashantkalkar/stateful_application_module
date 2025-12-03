@@ -1,5 +1,10 @@
 ## Unreleased
 
+## v0.7.0
+
+Changes:
+* Mount script file system extend steps - Added step to extend the file system on expansion of the underline EBS volume.
+
 ## v0.6.0
 
 Upgrade notes:

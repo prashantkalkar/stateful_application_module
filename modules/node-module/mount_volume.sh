@@ -81,6 +81,33 @@ while
   [[ -z ${DEVICE_UUID} ]]  || [[ -z ${DEVICE_MOUNTPOINT} ]]
 do sleep 1; done
 
+# Safety check: ensure the device is mounted where we expect
+if [[ "${DEVICE_MOUNTPOINT}" != "${MOUNT_PATH}" ]]; then
+  echo "ERROR: ${DEVICE_PATH} is mounted at '${DEVICE_MOUNTPOINT}', expected '${MOUNT_PATH}'. Aborting to avoid unsafe resize." >&2
+  exit 1
+fi
+
+# Grow filesystem according to its actual type
+if [[ "${FS_TYPE}" == "xfs" ]]; then
+  # Ensure xfs_growfs is available
+  if ! command -v xfs_growfs >/dev/null 2>&1; then
+    echo "ERROR: xfs_growfs not found; cannot safely grow XFS filesystem on ${DEVICE_PATH}" >&2
+    exit 1
+  fi
+  echo "Growing XFS filesystem on ${MOUNT_PATH} (${DEVICE_PATH})"
+  xfs_growfs "${MOUNT_PATH}"
+elif [[ "${FS_TYPE}" == "ext4" ]]; then
+  # Ensure resize2fs is available
+  if ! command -v resize2fs >/dev/null 2>&1; then
+    echo "ERROR: resize2fs not found; cannot safely grow ext4 filesystem on ${DEVICE_PATH}" >&2
+    exit 1
+  fi
+  echo "Growing ext4 filesystem on ${DEVICE_PATH}"
+  resize2fs "${DEVICE_PATH}"
+else
+  echo "WARNING: Filesystem type '${FS_TYPE}' not supported for automatic growth; skipping filesystem resize." >&2
+fi
+
 # echo list of devices
 lsblk -f
 blkid
