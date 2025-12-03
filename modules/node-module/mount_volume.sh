@@ -105,7 +105,7 @@ elif [[ "${FS_TYPE}" == "ext4" ]]; then
   echo "Growing ext4 filesystem on ${DEVICE_PATH}"
   resize2fs "${DEVICE_PATH}"
 else
-  echo "Filesystem type '${FS_TYPE}' not supported for automatic growth; skipping filesystem resize."
+  echo "WARNING: Filesystem type '${FS_TYPE}' not supported for automatic growth; skipping filesystem resize." >&2
 fi
 
 # echo list of devices
