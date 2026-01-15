@@ -70,7 +70,8 @@ locals {
     mount_path_owner_user        = var.data_volume.mount_path_owner_user
     mount_path_owner_group       = var.data_volume.mount_path_owner_group
     node_files_toupload          = var.node_files_toupload
-    node_config_script           = var.node_config_script
+    node_config_script           = var.node_config_script != null ? var.node_config_script : ""
+    node_config_script_s3_url    = var.node_config_script_s3_url != null ? var.node_config_script_s3_url : ""
     node_id                      = var.node_id
     node_ip                      = var.node_ip
   })

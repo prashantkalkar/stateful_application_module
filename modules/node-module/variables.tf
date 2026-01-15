@@ -55,6 +55,14 @@ variable "node_files_toupload" {
 
 variable "node_config_script" {
   type = string
+  default = null
+  description = "Base64 encoded node configuration script. Used when script is under 16KB."
+}
+
+variable "node_config_script_s3_url" {
+  type = string
+  default = null
+  description = "S3 URL for the node configuration script. Used when script exceeds AWS userdata 16KB limit. Takes precedence over node_config_script."
 }
 
 variable "node_instance_profile_id" {

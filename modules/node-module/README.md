@@ -68,7 +68,8 @@ No modules.
 | <a name="input_http_put_response_hop_limit"></a> [http\_put\_response\_hop\_limit](#input\_http\_put\_response\_hop\_limit) | n/a | `number` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | n/a | `string` | n/a | yes |
 | <a name="input_jq_download_url"></a> [jq\_download\_url](#input\_jq\_download\_url) | n/a | `string` | n/a | yes |
-| <a name="input_node_config_script"></a> [node\_config\_script](#input\_node\_config\_script) | n/a | `string` | n/a | yes |
+| <a name="input_node_config_script"></a> [node\_config\_script](#input\_node\_config\_script) | Base64 encoded node configuration script. Used when script is under 16KB. | `string` | `null` | no |
+| <a name="input_node_config_script_s3_url"></a> [node\_config\_script\_s3\_url](#input\_node\_config\_script\_s3\_url) | S3 URL for the node configuration script. Used when script exceeds AWS userdata 16KB limit. Takes precedence over node\_config\_script. | `string` | `null` | no |
 | <a name="input_node_files_toupload"></a> [node\_files\_toupload](#input\_node\_files\_toupload) | n/a | <pre>list(object({<br/>    contents = string<br/>    destination = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_node_id"></a> [node\_id](#input\_node\_id) | n/a | `string` | n/a | yes |
 | <a name="input_node_image"></a> [node\_image](#input\_node\_image) | n/a | `string` | n/a | yes |

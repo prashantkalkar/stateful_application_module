@@ -27,7 +27,7 @@ variable "node_files" {
     node_id = node identifier (this is not a index and need not in any specific ordered).
     node_files_toupload = list of file to be uploaded per node. These can be cluster config files etc.
     node_files_toupload.contents = Base64 encoded contents of the file to be uploaded on the node.
-    node_files_toupload.destination = File destination on the node. This will be the file path and name on the node. The file ownership should be changed by node_config_script.
+    node_files_toupload.destination = File destination on the node. This will be the file path and name on the node. The file ownership should be changed by the node configuration script downloaded from S3.
   EOT
 }
 
@@ -61,9 +61,22 @@ variable "default_data_volume" {
 
 variable "node_config_script" {
   type = string
+  default = null
   description = <<EOT
   Base64 encoded node configuration shell script.
-  Must include configure_cluster_node and wait_for_healthy_cluster function. Check documentation for more details about the contract
+  Must include configure_cluster_node and wait_for_healthy_cluster function. Check documentation for more details about the contract.
+  Note: If script exceeds AWS userdata 16KB limit, use node_config_script_s3_url instead.
+  EOT
+}
+
+variable "node_config_script_s3_url" {
+  type = string
+  default = null
+  description = <<EOT
+  S3 URL for the node configuration shell script (e.g., s3://bucket-name/path/to/script.sh).
+  Used to download the script when it exceeds AWS userdata 16KB limit.
+  Must include configure_cluster_node and wait_for_healthy_cluster function. Check documentation for more details about the contract.
+  Note: This takes precedence over node_config_script if both are provided.
   EOT
 }
 

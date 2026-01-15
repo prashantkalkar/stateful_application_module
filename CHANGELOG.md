@@ -1,5 +1,14 @@
 ## Unreleased
 
+Changes:
+* Added support for S3 URL-based node configuration scripts - Added `node_config_script_s3_url` variable to support downloading configuration scripts from S3. This is useful when scripts exceed AWS userdata 16KB limit. The implementation includes:
+  - S3 URL takes precedence if provided
+  - Automatic fallback to embedded `node_config_script` if S3 download fails or returns empty file
+  - Both variables are now optional (with `default = null`), but at least one must be provided
+  - Runtime validation ensures downloaded script is not null or empty before proceeding
+  - Fail-fast behavior with clear error messages if neither option provides a valid script
+  - Backward compatible - existing code using `node_config_script` continues to work without changes
+
 ## v0.7.0
 
 Changes:
