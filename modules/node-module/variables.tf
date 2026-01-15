@@ -84,3 +84,10 @@ variable "asg_lifecycle_hook_heartbeat_timeout" {
 variable "http_put_response_hop_limit" {
   type = number
 }
+
+variable "skip_wait_for_cluster_health" {
+  type        = bool
+  default     = false
+  description = "Skip waiting for cluster health check before completing autoscaling lifecycle hook"
+}
+

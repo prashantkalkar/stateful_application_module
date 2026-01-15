@@ -127,3 +127,10 @@ variable "http_put_response_hop_limit" {
   type = number
   default = 1
 }
+
+variable "skip_wait_for_cluster_health" {
+  type        = bool
+  default     = false
+  description = "Skip waiting for cluster health check before completing autoscaling lifecycle hook. Set to true to speed up instance launches when cluster health validation is not needed."
+}
+

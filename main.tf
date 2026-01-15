@@ -23,6 +23,7 @@ module "cluster_nodes" {
   instance_type                        = var.instance_type
   root_volume                          = var.root_volume
   http_put_response_hop_limit          = var.http_put_response_hop_limit
+  skip_wait_for_cluster_health         = var.skip_wait_for_cluster_health
 }
 
 resource "null_resource" "roll_instances" {

@@ -1,5 +1,10 @@
 ## Unreleased
 
+* Adds skip_wait_for_healthy_cluster variable to allow skipping the wait for healthy cluster step after node configuration.
+  This is useful in scenarios where the cluster health check is managed externally or is not required immediately after node setup.
+  or when cluster is down and you need add more nodes w/o waiting for healthy cluster.
+
+
 ## v0.7.0
 
 Changes:

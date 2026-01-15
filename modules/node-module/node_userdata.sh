@@ -34,6 +34,8 @@ NODE_CONFIG_SCRIPT=${node_config_script}
 NODE_ID=${node_id}
 # shellcheck disable=SC2154
 NODE_IP=${node_ip}
+# shellcheck disable=SC2154
+SKIP_WAIT_FOR_CLUSTER_HEALTH=${skip_wait_for_cluster_health}
 
 # upload files to node
 # shellcheck disable=SC1083
@@ -74,8 +76,13 @@ chmod +x node_config_script.sh
 source node_config_script.sh
 configure_cluster_node "$NODE_ID" "$NODE_IP"
 
-# Check cluster health as a whole
-wait_for_healthy_cluster "$NODE_ID" "$NODE_IP"
+# Check cluster health as a whole (skip if configured)
+if [ "$SKIP_WAIT_FOR_CLUSTER_HEALTH" = "false" ]; then
+  echo "Waiting for cluster to be healthy..."
+  wait_for_healthy_cluster "$NODE_ID" "$NODE_IP"
+else
+  echo "Skipping wait for cluster health check (skip_wait_for_cluster_health is set to true)"
+fi
 
 # Update AWS ASG hook status to proceed.
 aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE \

@@ -73,6 +73,7 @@ locals {
     node_config_script           = var.node_config_script
     node_id                      = var.node_id
     node_ip                      = var.node_ip
+    skip_wait_for_cluster_health = var.skip_wait_for_cluster_health
   })
   asg_hook_name = "${var.app_name}-node-asg-hook"
 }
