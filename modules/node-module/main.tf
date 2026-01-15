@@ -55,6 +55,7 @@ data "aws_region" "current" {}
 
 locals {
   asg_name = "${var.app_name}-node-${var.node_id}"
+
   userdata = templatefile("${path.module}/node_userdata.sh", {
     device_name                  = var.data_volume.device_name
     volume_id                    = aws_ebs_volume.node_data.id
@@ -119,6 +120,11 @@ resource "aws_launch_template" "node" {
 
   lifecycle {
     create_before_destroy = true
+
+    precondition {
+      condition     = var.node_config_script != null || var.node_config_script_s3_url != null
+      error_message = "Either node_config_script or node_config_script_s3_url must be provided."
+    }
   }
 
   tags = {
