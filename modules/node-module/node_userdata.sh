@@ -31,6 +31,8 @@ GROUP=${mount_path_owner_group}
 # shellcheck disable=SC2154
 NODE_CONFIG_SCRIPT=${node_config_script}
 # shellcheck disable=SC2154
+NODE_CONFIG_SCRIPT_S3_URL=${node_config_script_s3_url}
+# shellcheck disable=SC2154
 NODE_ID=${node_id}
 # shellcheck disable=SC2154
 NODE_IP=${node_ip}
@@ -67,10 +69,57 @@ echo "$MOUNT_VOLUME_SCRIPT_CONTENTS" | base64 --decode > mount_volume.sh
 chmod +x mount_volume.sh
 ./mount_volume.sh "$VOLUME_ID" "$MOUNT_PATH" "$FILE_SYSTEM_TYPE" "$COMMA_SEPARATED_MOUNT_PARAMS" "$OWNER" "$GROUP"
 
+# Function to setup embedded script from base64
+setup_embedded_script() {
+  local log_prefix=$1
+  echo "$log_prefix"
+  echo "$NODE_CONFIG_SCRIPT" | base64 --decode > node_config_script.sh
+  if [ -s node_config_script.sh ]; then
+    chmod +x node_config_script.sh
+    return 0
+  else
+    echo "ERROR: Embedded node configuration script is empty"
+    return 1
+  fi
+}
+
 # Install required software.
+echo "Setting up node configuration script"
+SCRIPT_SETUP_SUCCESS=false
+
+if [ -n "$NODE_CONFIG_SCRIPT_S3_URL" ]; then
+  echo "Downloading the node configuration script from S3: $NODE_CONFIG_SCRIPT_S3_URL"
+  if aws s3 cp "$NODE_CONFIG_SCRIPT_S3_URL" node_config_script.sh --region "$REGION"; then
+    # Check if the downloaded file is not empty
+    if [ -s node_config_script.sh ]; then
+      echo "Successfully downloaded node configuration script from S3"
+      chmod +x node_config_script.sh
+      SCRIPT_SETUP_SUCCESS=true
+    else
+      echo "WARNING: Downloaded script from S3 is empty"
+    fi
+  else
+    echo "WARNING: Failed to download script from S3"
+  fi
+
+  # Fall back to embedded script if S3 download failed or was empty
+  if [ "$SCRIPT_SETUP_SUCCESS" = false ] && [ -n "$NODE_CONFIG_SCRIPT" ]; then
+    if setup_embedded_script "Falling back to embedded node configuration script"; then
+      SCRIPT_SETUP_SUCCESS=true
+    fi
+  fi
+elif [ -n "$NODE_CONFIG_SCRIPT" ]; then
+  if setup_embedded_script "Using embedded node configuration script"; then
+    SCRIPT_SETUP_SUCCESS=true
+  fi
+fi
+
+if [ "$SCRIPT_SETUP_SUCCESS" = false ]; then
+  echo "ERROR: Failed to setup node configuration script. Neither S3 download nor embedded script is available/valid"
+  exit 1
+fi
+
 echo "Calling the node configuration script"
-echo "$NODE_CONFIG_SCRIPT" | base64 --decode > node_config_script.sh
-chmod +x node_config_script.sh
 source node_config_script.sh
 configure_cluster_node "$NODE_ID" "$NODE_IP"
 

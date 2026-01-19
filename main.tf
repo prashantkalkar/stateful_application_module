@@ -15,6 +15,7 @@ module "cluster_nodes" {
   node_subnet_id                       = each.value.node_subnet_id
   node_files_toupload                  = local.node_id_to_node_files_map[each.key].node_files_toupload
   node_config_script                   = var.node_config_script
+  node_config_script_s3_url            = var.node_config_script_s3_url
   security_groups                      = var.security_groups
   node_image                           = each.value.node_image != null ? each.value.node_image : var.node_image
   jq_download_url                      = var.jq_download_url
