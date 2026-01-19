@@ -1,5 +1,7 @@
 ## Unreleased
 
+## v0.8.0
+
 Changes:
 * Added support for S3 URL-based node configuration scripts - Added `node_config_script_s3_url` variable to support downloading configuration scripts from S3. This is useful when scripts exceed AWS userdata 16KB limit. The implementation includes:
   - S3 URL takes precedence if provided
