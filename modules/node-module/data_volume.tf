@@ -15,4 +15,8 @@ resource "aws_ebs_volume" "node_data" {
   tags = merge({
     Name = "${var.app_name}-data-${var.node_id}"
   }, var.data_volume.tags)
+
+  lifecycle {
+    prevent_destroy = var.data_volume.prevent_destroy != null ? var.data_volume.prevent_destroy : true
+  }
 }
